@@ -5,6 +5,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/CustomFontStyle</item>
+    </style>
+    <style name="CustomFontStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/arima_madurai_regular</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>
