@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textViewStyle">@style/CustomFontStyle</item>
     </style>
-    <style name="CustomFontStyle" parent="android:Widget.TextView">
+    <style name="CustomFontStyle" parent="android:Widget">
         <item name="android:fontFamily">@font/arima_madurai_regular</item>
         <item name="android:textSize">16sp</item>
     </style>
