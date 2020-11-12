@@ -18,3 +18,9 @@ class PasswordUtil {
         }
     }
 }
+
+object ConstantVariables {
+
+    val apiKey = "yV1rW0bG2rQ4nD6mI0aQ5iW2dA6kH5"
+
+}
