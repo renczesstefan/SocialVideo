@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="registerModel"
-            type="com.social.socialvideo.fragments.RegistrationFragment" />
+            name="registrationViewModel"
+            type="com.social.socialvideo.fragments.RegistrationViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +35,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_title" />
+        app:layout_constraintTop_toBottomOf="@+id/register_title"
+        android:text="@{registrationViewModel.useId}"/>
 
     <EditText
         android:id="@+id/email"
@@ -83,7 +84,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordConfirm"
-        android:onClick="@{() -> registerModel.registerUser()}"/>
+        android:onClick="@{() -> registrationViewModel.registerUser()}"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

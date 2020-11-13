@@ -10,3 +10,5 @@ class RegistrationResponse {
     lateinit var profile: String
 
 }
+
+
