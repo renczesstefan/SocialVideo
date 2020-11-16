@@ -6,7 +6,7 @@
     <data>
         <variable
             name="registrationViewModel"
-            type="com.social.socialvideo.fragments.RegistrationViewModel" />
+            type="com.social.socialvideo.viewModels.RegistrationViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_title"
-        android:text="@{registrationViewModel.useId}"/>
+        android:text="@={registrationViewModel.userId}"/>
 
     <EditText
         android:id="@+id/email"
@@ -48,7 +48,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userID"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress"
+        android:text="@={registrationViewModel.email}"/>
 
     <EditText
         android:id="@+id/password"
@@ -60,7 +61,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        android:text="@={registrationViewModel.password}"/>
 
     <EditText
         android:id="@+id/passwordConfirm"
@@ -72,7 +74,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        android:text="@={registrationViewModel.passwordConfirmation}"/>
 
     <Button
         android:id="@+id/register"

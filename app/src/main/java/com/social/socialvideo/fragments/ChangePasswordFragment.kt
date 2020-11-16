@@ -24,7 +24,7 @@ class ChangePasswordFragment : Fragment() {
     }
 
     fun onChangeClicked(){
-        if (PasswordUtil.checkMatchingPasswords(binding.password.text.toString(), binding.passwordConfirm.text.toString(), this.context)) {
+        if (PasswordUtil.checkMatchingPasswords(binding.password.text.toString(), binding.passwordConfirm.text.toString())) {
             this.findNavController().navigate(R.id.action_changePasswordFragment_to_profileFragment)
         } else {
             binding.password.text.clear()

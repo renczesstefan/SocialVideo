@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.social.socialvideo.R
 import com.social.socialvideo.databinding.RegistrationBinding
+import com.social.socialvideo.enums.ServerResponse
+import com.social.socialvideo.viewModels.RegistrationViewModel
 
 
 class RegistrationFragment : Fragment() {
@@ -27,9 +30,8 @@ class RegistrationFragment : Fragment() {
                 registrationViewModel = ViewModelProvider(this).get(RegistrationViewModel::class.java)
                 binding.registrationViewModel = registrationViewModel
 
-
-                registrationViewModel.onUserRegistration.observe(viewLifecycleOwner, Observer { isSuccess ->
-                        resolveUserRegistration(isSuccess)
+                registrationViewModel.onUserRegistration.observe(viewLifecycleOwner, Observer { response ->
+                        resolveUserRegistration(response)
                 })
 
                 binding.lifecycleOwner = viewLifecycleOwner
@@ -38,13 +40,24 @@ class RegistrationFragment : Fragment() {
         }
 
 
-        private fun resolveUserRegistration(isSuccess: Boolean) {
-                if (isSuccess) {
-                        this.findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
-                        registrationViewModel.userRegistered()
+        private fun resolveUserRegistration(response: ServerResponse) {
+                when (response){
+                        ServerResponse.SERVER_SUCCESS -> {
+                                this.findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
+                                Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
+                                registrationViewModel.userRegistered()
+                        }
+                        ServerResponse.SERVER_ERROR -> {
+                                Toast.makeText(context, "Registration failed!", Toast.LENGTH_SHORT).show()
+                                registrationViewModel.userRegistered()
+                        }
+                        ServerResponse.PASSWORD_MISMATCH -> {
+                                Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                                registrationViewModel.userRegistered()
+                        }
+                        else -> {}
                 }
+
         }
-
-
 
 }

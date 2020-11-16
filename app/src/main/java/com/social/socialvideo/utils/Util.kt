@@ -6,12 +6,10 @@ import android.widget.Toast
 class PasswordUtil {
     companion object {
         fun checkMatchingPasswords(
-            password1: String,
-            password2: String,
-            context: Context?
+            password1: String?,
+            password2: String?
         ): Boolean {
             if (!password1.equals(password2)) {
-                Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
                 return false
             }
             return true
@@ -22,5 +20,4 @@ class PasswordUtil {
 object ConstantVariables {
 
     val apiKey = "yV1rW0bG2rQ4nD6mI0aQ5iW2dA6kH5"
-
 }

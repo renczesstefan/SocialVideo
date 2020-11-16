@@ -6,14 +6,13 @@
 
     <data>
         <variable
-            name="loginModel"
-            type="com.social.socialvideo.fragments.LoginFragment" />
+            name="loginViewModel"
+            type="com.social.socialvideo.viewModels.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <TextView
             android:id="@+id/textView3"
@@ -37,7 +36,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            android:text="@={loginViewModel.username}"/>
 
         <EditText
             android:id="@+id/textView2"
@@ -50,7 +50,8 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.283" />
+            app:layout_constraintVertical_bias="0.283"
+            android:text="@={loginViewModel.password}"/>
 
         <Button
             android:id="@+id/login"
@@ -62,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> loginModel.onLoginClick()}"/>
+            android:onClick="@{() -> loginViewModel.onLogin()}"/>
 
         <Button
             android:id="@+id/register"
@@ -74,6 +75,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{() -> loginModel.onRegistrationClick()}"/>
+            android:onClick="@{() -> loginViewModel.onRegistrationClick()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
