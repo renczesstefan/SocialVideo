@@ -1,9 +1,6 @@
 package com.social.socialvideo.network
 
-import com.social.socialvideo.entities.LoginRequest
-import com.social.socialvideo.entities.LoginResponse
-import com.social.socialvideo.entities.RegistrationRequest
-import com.social.socialvideo.entities.RegistrationResponse
+import com.social.socialvideo.entities.*
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,8 +29,14 @@ interface RestApiService {
     @POST(".")
     fun createUser(@Body registration: RegistrationRequest): Call<RegistrationResponse>
 
-    @GET(".")
-    fun login(@Body registration: LoginRequest): Call<LoginResponse>
+    @POST(".")
+    fun login(@Body login: LoginRequest): Call<LoginResponse>
+
+    @POST(".")
+    fun changePassword(@Body login: ChangePasswordRequest): Call<ChangePasswordResponse>
+
+    @POST(".")
+    fun checkUsername(@Body login: CheckUsernameRequest): Call<CheckUsernameResponse>
 
 }
 

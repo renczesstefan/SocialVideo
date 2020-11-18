@@ -55,6 +55,10 @@ class RegistrationFragment : Fragment() {
                                 Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
                                 registrationViewModel.userRegistered()
                         }
+                        ServerResponse.USER_ALREADY_EXISTS -> {
+                                Toast.makeText(context, "User with this username has already been registered!", Toast.LENGTH_SHORT).show()
+                                registrationViewModel.userRegistered()
+                        }
                         else -> {}
                 }
 

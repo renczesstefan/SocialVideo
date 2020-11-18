@@ -3,6 +3,15 @@ package com.social.socialvideo.viewModels;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.social.socialvideo.entities.LoginRequest
+import com.social.socialvideo.entities.LoginResponse
+import com.social.socialvideo.entities.RegistrationResponse
+import com.social.socialvideo.enums.ServerResponse
+import com.social.socialvideo.network.RestApiService
+import com.social.socialvideo.network.retrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LoginViewModel : ViewModel() {
@@ -12,18 +21,38 @@ class LoginViewModel : ViewModel() {
     var _onRegistrationClicked = MutableLiveData<Boolean>()
     val onRegistrationClicked: LiveData<Boolean>
         get() = _onRegistrationClicked
-    var _onLoginClicked = MutableLiveData<Boolean>()
-    val onLoginClicked: LiveData<Boolean>
-        get() = _onLoginClicked
+    var _onUserLogin = MutableLiveData<ServerResponse>()
+    val onUserLogin: LiveData<ServerResponse>
+        get() = _onUserLogin
+    var _userToken = MutableLiveData<String>()
+    val userToken: LiveData<String>
+        get() = _userToken
 
+    fun onLogin() {
+        val loginRequest = initLoginRequest()
+        val apiService = retrofit.create(RestApiService::class.java)
+        val loginResponse: Call<LoginResponse> = apiService.login(loginRequest)
 
-    fun onLogin(){
-
-        _onLoginClicked.value = true
+        loginResponse.enqueue(object : Callback<LoginResponse> {
+            override fun onFailure(call: Call<LoginResponse>?, t: Throwable?) {
+                _onUserLogin.value = ServerResponse.SERVER_ERROR
+            }
+            override fun onResponse(
+                call: Call<LoginResponse>?,
+                response: Response<LoginResponse>?
+            ) {
+                if(response?.code() == 200) {
+                    _userToken.value = response?.body()?.token
+                    _onUserLogin.value = ServerResponse.SERVER_SUCCESS
+                }else{
+                    _onUserLogin.value = ServerResponse.SERVER_ERROR
+                }
+            }
+        })
     }
 
     fun loggedIn(){
-        _onLoginClicked.value = false
+        _onUserLogin.value = ServerResponse.DEFAULT
     }
     
     fun onRegistrationClick(){
@@ -32,6 +61,13 @@ class LoginViewModel : ViewModel() {
 
     fun registrationClicked(){
         _onRegistrationClicked.value = false
+    }
+
+    private fun initLoginRequest(): LoginRequest {
+        val loginRequest = LoginRequest()
+        loginRequest.username = username.value.toString()
+        loginRequest.password = password.value.toString()
+        return loginRequest
     }
 
 }

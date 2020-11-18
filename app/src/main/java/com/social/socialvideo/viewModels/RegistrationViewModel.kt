@@ -3,6 +3,8 @@ package com.social.socialvideo.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.social.socialvideo.entities.CheckUsernameRequest
+import com.social.socialvideo.entities.CheckUsernameResponse
 import com.social.socialvideo.entities.RegistrationRequest
 import com.social.socialvideo.entities.RegistrationResponse
 import com.social.socialvideo.enums.ServerResponse
@@ -24,36 +26,60 @@ class RegistrationViewModel : ViewModel() {
         get() = _onUserRegistration
 
     fun registerUser() {
-        if (PasswordUtil.checkMatchingPasswords(password.value, passwordConfirmation.value)) {
+        val apiService = retrofit.create(RestApiService::class.java)
+        val checkUsernameRequest = CheckUsernameRequest()
+        checkUsernameRequest.username = userId.value.toString()
+        val checkUsernameResponse: Call<CheckUsernameResponse> =
+            apiService.checkUsername(checkUsernameRequest)
 
-            val registrationRequest = initRegistrationRequest()
-            val apiService = retrofit.create(RestApiService::class.java)
-            val regResponse: Call<RegistrationResponse> = apiService.createUser(registrationRequest)
+        checkUsernameResponse.enqueue(object : Callback<CheckUsernameResponse> {
+            override fun onFailure(call: Call<CheckUsernameResponse>?, t: Throwable?) {
+                _onUserRegistration.value = ServerResponse.SERVER_ERROR
+            }
+            override fun onResponse(
+                call: Call<CheckUsernameResponse>?,
+                response: Response<CheckUsernameResponse>?
+            ) {
+                if (response?.code() == 200 && response.body()!!.exists) {
+                    _onUserRegistration.value = ServerResponse.USER_ALREADY_EXISTS
+                } else {
+                    if (_onUserRegistration.value != ServerResponse.USER_ALREADY_EXISTS && !PasswordUtil.checkMatchingPasswords(
+                            password.value,
+                            passwordConfirmation.value
+                        )
+                    ) {
+                        _onUserRegistration.value = ServerResponse.PASSWORD_MISMATCH
+                        password.value = ""
+                        passwordConfirmation.value = ""
+                    } else if (_onUserRegistration.value != ServerResponse.USER_ALREADY_EXISTS) {
+                        val registrationRequest = initRegistrationRequest()
+                        val regResponse: Call<RegistrationResponse> = apiService.createUser(registrationRequest)
+                        regResponse.enqueue(object : Callback<RegistrationResponse> {
+                            override fun onFailure(call: Call<RegistrationResponse>?, t: Throwable?) {
+                                _onUserRegistration.value = ServerResponse.SERVER_ERROR
+                            }
 
-            regResponse.enqueue(object : Callback<RegistrationResponse> {
-                override fun onFailure(call: Call<RegistrationResponse>?, t: Throwable?) {
-                    _onUserRegistration.value = ServerResponse.SERVER_ERROR
+                            override fun onResponse(
+                                call: Call<RegistrationResponse>?,
+                                response: Response<RegistrationResponse>?
+                            ) {
+                                _onUserRegistration.value = ServerResponse.SERVER_SUCCESS
+                            }
+                        })
+                    }
                 }
+            }
+        })
 
-                override fun onResponse(
-                    call: Call<RegistrationResponse>?,
-                    response: Response<RegistrationResponse>?
-                ) {
-                    _onUserRegistration.value = ServerResponse.SERVER_SUCCESS
-                }
-            })
-        } else {
-            _onUserRegistration.value = ServerResponse.PASSWORD_MISMATCH
-            password.value = ""
-            passwordConfirmation.value = ""
-        }
+
+
     }
 
     fun userRegistered() {
         _onUserRegistration.value = ServerResponse.DEFAULT
     }
 
-    private fun initRegistrationRequest(): RegistrationRequest{
+    private fun initRegistrationRequest(): RegistrationRequest {
         val registrationRequest = RegistrationRequest()
         registrationRequest.username = userId.value.toString()
         registrationRequest.email = email.value.toString()

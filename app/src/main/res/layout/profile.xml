@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="profileModel"
-            type="com.social.socialvideo.fragments.ProfileFragment" />
+            name="profileViewModel"
+            type="com.social.socialvideo.viewModels.ProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
@@ -71,7 +71,7 @@
             android:text="@string/change_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileEmail"
-            android:onClick="@{() -> profileModel.onChangePasswordClick()}"/>
+            android:onClick="@{() -> profileViewModel.onPasswordChange()}"/>
 
         <TextView
             android:id="@+id/logout"
@@ -88,7 +88,7 @@
             android:text="@string/logout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/changePassword"
-            android:onClick="@{() -> profileModel.onLogoutClick()}"/>
+            android:onClick="@{() -> profileViewModel.onLogout()}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

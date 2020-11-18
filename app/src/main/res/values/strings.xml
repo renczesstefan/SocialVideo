@@ -4,8 +4,9 @@
     <string name="register_title">Registration</string>
     <string name="register">Register</string>
     <string name="userId">User ID</string>
-    <string name="password">Password</string>
-    <string name="password_confirm">Confirm password</string>
+    <string name="oldpassword">Old password</string>
+    <string name="password">New password</string>
+    <string name="password_confirm">Confirm new password</string>
     <string name="email">E-mail</string>
     <string name="back_to_login">Back to login</string>
     <string name="change_password">Change password</string>

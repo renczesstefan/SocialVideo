@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "862948436322",
+    "firebase_url": "https://socialvideo-9ec77.firebaseio.com",
+    "project_id": "socialvideo-9ec77",
+    "storage_bucket": "socialvideo-9ec77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862948436322:android:84f6a8a3116ede6e32a43b",
+        "android_client_info": {
+          "package_name": "com.social.socialvideo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862948436322-afdsgejbjub6udf1t7aend6boa8e7hsk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.social.socialvideo",
+            "certificate_hash": "4a8033d5d8de3a0bf878f1ea5617319f1ff390de"
+          }
+        },
+        {
+          "client_id": "862948436322-pclkbs3gdjk142u1jj907vl4n3pgqijr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7H25WnEaL9M3mSCGqEboqCG0mA44swoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862948436322-pclkbs3gdjk142u1jj907vl4n3pgqijr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

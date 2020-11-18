@@ -1,9 +1,11 @@
 package com.social.socialvideo.fragments;
 
 import android.os.Bundle
+import android.se.omapi.Session
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.social.socialvideo.R
 import com.social.socialvideo.databinding.LoginBinding
+import com.social.socialvideo.enums.ServerResponse
+import com.social.socialvideo.services.SessionManager
 import com.social.socialvideo.viewModels.LoginViewModel
 
 class LoginFragment : Fragment() {
@@ -19,6 +23,8 @@ class LoginFragment : Fragment() {
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val sessionManager = SessionManager(this.requireContext())
+
         // Slúži na optimálnejšie nájdenie data fieldov pre fragment netreba používať R, findId...
         binding = DataBindingUtil.inflate(
             inflater, R.layout.login, container, false)
@@ -26,17 +32,33 @@ class LoginFragment : Fragment() {
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.loginViewModel = loginViewModel
 
-        loginViewModel.onLoginClicked.observe(viewLifecycleOwner, Observer { isSuccess ->
-            resolveUserLogin(isSuccess)
-        })
+        // checking if user is logged in
+        if(!sessionManager.fetchAuthToken().isNullOrBlank()){
+            this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+        } else {
 
-        loginViewModel.onRegistrationClicked.observe(viewLifecycleOwner, Observer { isClicked ->
-            navigateToRegistration(isClicked)
-        })
+            loginViewModel.onUserLogin.observe(viewLifecycleOwner, Observer { isSuccess ->
+                resolveUserLogin(isSuccess)
+            })
 
-        binding.lifecycleOwner = viewLifecycleOwner
+            loginViewModel.userToken.observe(viewLifecycleOwner, Observer { token ->
+                saveUserToken(token)
+            })
+
+            loginViewModel.onRegistrationClicked.observe(viewLifecycleOwner, Observer { isClicked ->
+                navigateToRegistration(isClicked)
+            })
+
+            binding.lifecycleOwner = viewLifecycleOwner
+        }
 
         return binding.root
+
+    }
+
+    private fun saveUserToken(token: String?) {
+        val sessionManager = SessionManager(this.requireContext())
+         sessionManager.saveAuthToken(token.toString())
     }
 
     private fun navigateToRegistration(clicked: Boolean) {
@@ -46,11 +68,20 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun resolveUserLogin(isSuccess: Boolean) {
-        if (isSuccess) {
-            this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
-            loginViewModel.loggedIn()
+    private fun resolveUserLogin(response: ServerResponse) {
+        when (response){
+            ServerResponse.SERVER_SUCCESS -> {
+                this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                loginViewModel.loggedIn()
+            }
+            ServerResponse.SERVER_ERROR -> {
+                Toast.makeText(context, "Login failed!", Toast.LENGTH_SHORT).show()
+                loginViewModel.loggedIn()
+            }
+            else -> {}
         }
+
     }
 
 }
