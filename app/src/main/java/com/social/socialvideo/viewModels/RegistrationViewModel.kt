@@ -3,10 +3,10 @@ package com.social.socialvideo.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.social.socialvideo.entities.CheckUsernameRequest
-import com.social.socialvideo.entities.CheckUsernameResponse
-import com.social.socialvideo.entities.RegistrationRequest
-import com.social.socialvideo.entities.RegistrationResponse
+import com.social.socialvideo.rest.entities.CheckUsernameRequest
+import com.social.socialvideo.rest.entities.CheckUsernameResponse
+import com.social.socialvideo.rest.entities.RegistrationRequest
+import com.social.socialvideo.rest.entities.RegistrationResponse
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.network.RestApiService
 import com.social.socialvideo.network.retrofit

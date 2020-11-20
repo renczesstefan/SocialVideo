@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_profileFragment_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -41,5 +44,9 @@
             android:id="@+id/action_changePasswordFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.social.socialvideo.fragments.PostsFragment"
+        android:label="PostsFragment" />
 
 </navigation>

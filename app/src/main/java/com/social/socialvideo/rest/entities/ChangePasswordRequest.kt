@@ -1,4 +1,4 @@
-package com.social.socialvideo.entities;
+package com.social.socialvideo.rest.entities;
 
 class ChangePasswordRequest {
     var action: String = "password"

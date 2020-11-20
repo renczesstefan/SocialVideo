@@ -3,9 +3,8 @@ package com.social.socialvideo.viewModels;
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.social.socialvideo.entities.LoginRequest
-import com.social.socialvideo.entities.LoginResponse
-import com.social.socialvideo.entities.RegistrationResponse
+import com.social.socialvideo.rest.entities.LoginRequest
+import com.social.socialvideo.rest.entities.LoginResponse
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.network.RestApiService
 import com.social.socialvideo.network.retrofit
