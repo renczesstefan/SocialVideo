@@ -1,7 +1,7 @@
 package com.social.socialvideo.utils
 
-import android.content.Context
-import android.widget.Toast
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
 class PasswordUtil {
     companion object {
@@ -21,3 +21,5 @@ object ConstantVariables {
 
     val apiKey = "yV1rW0bG2rQ4nD6mI0aQ5iW2dA6kH5"
 }
+
+class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)

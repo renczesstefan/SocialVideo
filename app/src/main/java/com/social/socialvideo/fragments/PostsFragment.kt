@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.social.socialvideo.R
+import com.social.socialvideo.adapters.UserPostsAdapter
 import com.social.socialvideo.databinding.PostsBinding
 import com.social.socialvideo.domain.UserPost
+import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.viewModels.PostsViewModel
 
 class PostsFragment : Fragment() {
@@ -19,6 +23,7 @@ class PostsFragment : Fragment() {
 
     private lateinit var binding: PostsBinding
     private lateinit var postsViewModel: PostsViewModel
+    private var userPostsAdapter: UserPostsAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -31,6 +36,11 @@ class PostsFragment : Fragment() {
         postsViewModel = ViewModelProvider(this, PostsViewModel.Factory(activity.application)).get(PostsViewModel::class.java)
 
         binding.postsViewModel = postsViewModel
+
+        userPostsAdapter = UserPostsAdapter()
+
+        binding.userPosts.adapter = userPostsAdapter
+
         return binding.root
     }
 
@@ -43,7 +53,7 @@ class PostsFragment : Fragment() {
         // Observujeme livedata ktore vracaju vsetky videa z databazy
         postsViewModel.postList.observe(viewLifecycleOwner, Observer<List<UserPost>> { videos ->
             videos?.apply {
-                println("cuck")
+                userPostsAdapter?.data = videos
             }
         })
     }

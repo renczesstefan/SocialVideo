@@ -21,6 +21,9 @@ class UserPostRepository(private val database: UserPostDatabase) {
         withContext(Dispatchers.IO) {
 
             database.userPostDao.insert(DatabaseUserPost("a","b","c","d"))
+            database.userPostDao.insert(DatabaseUserPost("b","qwe","qwe","qwe"))
+            database.userPostDao.insert(DatabaseUserPost("c","asdsad","qweewqq","zxczxczxc"))
+            database.userPostDao.insert(DatabaseUserPost("d","fsdafsda","sfdsdaf","sfdsdf"))
         }
     }
 
