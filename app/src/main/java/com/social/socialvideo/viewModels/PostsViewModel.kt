@@ -4,8 +4,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.social.socialvideo.db.UserPostRepository
+import com.social.socialvideo.db.entities.DatabaseUserPost
 import com.social.socialvideo.db.entities.getDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 /**
  * @param application The application that this viewmodel is attached to, it's safe to hold a
  * reference to applications across rotation since Application is never recreated during actiivty
@@ -15,10 +21,8 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val videosRepository = UserPostRepository(getDatabase(application))
 
-    suspend fun addUser(){
-        videosRepository.addPost()
-    }
-
+    // Sluzi na zabezpecenie poslania application contextu z fragmentu do viewModelu
+    // application potrebujeme na ziskanie repozitaru ktorz pracuje s databazou
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PostsViewModel::class.java)) {
@@ -28,4 +32,13 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
     }
+
+    val postList = videosRepository.posts
+
+    init {
+        viewModelScope.launch {
+            videosRepository.addPost()
+        }
+    }
+
 }

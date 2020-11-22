@@ -6,14 +6,14 @@ import androidx.room.*
 
 @Dao
 interface UserPostDao {
-    @Query("select * from userpost")
-    fun getVideos(): LiveData<List<UserPost>>
+    @Query("select * from databaseuserpost")
+    fun getVideos(): LiveData<List<DatabaseUserPost>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert( videos: UserPost)
+    fun insert( videos: DatabaseUserPost)
 }
 
-@Database(entities = [UserPost::class], version = 1)
+@Database(entities = [DatabaseUserPost::class], version = 1)
 abstract class UserPostDatabase: RoomDatabase() {
     abstract val userPostDao: UserPostDao
 }
