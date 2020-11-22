@@ -1,15 +1,15 @@
 package com.social.socialvideo.network
 
 import com.social.socialvideo.entities.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
-private const val BASE_URL = "http://api.mcomputing.eu/mobv/service.php/"
+private const val BASE_URL = "http://api.mcomputing.eu/mobv/"
 
 
 
@@ -26,17 +26,21 @@ val retrofit = Retrofit.Builder()
 
 interface RestApiService {
 
-    @POST(".")
+    @POST("service.php")
     fun createUser(@Body registration: RegistrationRequest): Call<RegistrationResponse>
 
-    @POST(".")
+    @POST("service.php")
     fun login(@Body login: LoginRequest): Call<LoginResponse>
 
-    @POST(".")
+    @POST("service.php")
     fun changePassword(@Body login: ChangePasswordRequest): Call<ChangePasswordResponse>
 
-    @POST(".")
+    @POST("service.php")
     fun checkUsername(@Body login: CheckUsernameRequest): Call<CheckUsernameResponse>
+
+    @Multipart
+    @POST("upload.php")
+    fun uploadProfilePic(@Part image: MultipartBody.Part, @Part("data") data: RequestBody): Call<UploadResponse>
 
 }
 
