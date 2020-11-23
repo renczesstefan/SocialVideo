@@ -68,6 +68,8 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         }
     }
 
+
+
     fun onLogout() {
         _onLogout.value = true
     }
@@ -115,6 +117,7 @@ class ProfileViewModel(private val token: String) : ViewModel() {
             ) {
                 if(response?.code() == 200){
                     _uploadStatus.value = ServerResponse.SERVER_SUCCESS
+                    resolveProfilePicture(token)
                 }else{
                     _uploadStatus.value = ServerResponse.SERVER_ERROR
                 }

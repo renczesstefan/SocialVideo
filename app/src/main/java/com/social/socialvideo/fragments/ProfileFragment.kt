@@ -89,8 +89,10 @@ class ProfileFragment : Fragment() {
         })
 
         profileViewModel.uploadStatus.observe(viewLifecycleOwner, Observer { status ->
-            resolveUploadStatus(status)
-            profileViewModel.resetState()
+            if(status != ServerResponse.DEFAULT) {
+                resolveUploadStatus(status)
+                profileViewModel.resetState()
+            }
         })
 
         return binding.root
