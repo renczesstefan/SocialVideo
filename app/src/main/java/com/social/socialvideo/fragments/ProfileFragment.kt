@@ -72,7 +72,7 @@ class ProfileFragment : Fragment() {
         profileViewModel.onPasswordChange.observe(viewLifecycleOwner, Observer { changePwd ->
             if(changePwd) {
                 this.findNavController()
-                    .navigate(R.id.action_profileFragment_to_changePasswordFragment)
+                    .navigate(R.id.action_profileFragment_to_postsFragment)
                 profileViewModel.resetOnPasswordChange()
             }
         })

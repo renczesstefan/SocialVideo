@@ -1,4 +1,4 @@
-package com.social.socialvideo.entities
+package com.social.socialvideo.rest.entities
 
 class LoginRequest {
     var action: String = "login"

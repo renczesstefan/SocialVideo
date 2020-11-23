@@ -9,6 +9,8 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
 class PasswordUtil {
     companion object {
@@ -136,3 +138,6 @@ object PathUtils {
         return "com.google.android.apps.photos.content" == uri.getAuthority()
     }
 }
+
+
+class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
