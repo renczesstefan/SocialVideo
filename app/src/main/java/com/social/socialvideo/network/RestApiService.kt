@@ -38,6 +38,9 @@ interface RestApiService {
     @POST("service.php")
     fun checkUsername(@Body login: CheckUsernameRequest): Call<CheckUsernameResponse>
 
+    @POST("service.php")
+    fun userInfo(@Body login: UserInfoRequest): Call<UserInfoResponse>
+
     @Multipart
     @POST("upload.php")
     fun uploadProfilePic(@Part image: MultipartBody.Part, @Part("data") data: RequestBody): Call<UploadResponse>

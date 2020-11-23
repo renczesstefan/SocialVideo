@@ -2,10 +2,11 @@ package com.social.socialvideo.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +16,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.social.socialvideo.R
 import com.social.socialvideo.databinding.ProfileBinding
+import com.social.socialvideo.entities.UserInfoResponse
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.services.SessionManager
 import com.social.socialvideo.utils.PathUtils
 import com.social.socialvideo.viewModels.ProfileViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.InputStream
+import java.net.URL
 
 
 class ProfileFragment : Fragment() {
@@ -41,7 +48,10 @@ class ProfileFragment : Fragment() {
         // Get the viewmodel
         profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         binding.profileViewModel = profileViewModel
-        profileViewModel._imageView.value = binding.profileImage
+
+        profileViewModel.userInfo.observe(viewLifecycleOwner, Observer { userInfo ->
+            resolveProfilePic(userInfo)
+        })
 
         profileViewModel.addImage.observe(viewLifecycleOwner, Observer { addImage ->
             if(addImage){
@@ -97,12 +107,18 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 9 && resultCode == RESULT_OK && data != null){
-            var imageUri: Uri = data.data!!
-//            profileViewModel._imageView.value?.setImageURI(imageUri);
-            var path: String = PathUtils.getPath(this.requireContext(), imageUri)!!
+            val imageUri: Uri = data.data!!
+            val path: String = PathUtils.getPath(this.requireContext(), imageUri)!!
             profileViewModel.uploadProfilePic(path, sessionManager.fetchAuthToken()!!)
         }
     }
 
+    private fun resolveProfilePic(userInfo: UserInfoResponse){
+        if(userInfo.profile != null && userInfo.profile != ""){
+            val inputStr: InputStream = URL("http://api.mcomputing.eu/mobv/uploads/" + userInfo.profile).openStream() as InputStream
+            val bitmap: Bitmap = BitmapFactory.decodeStream(inputStr)
+            binding.profileImage.setImageBitmap(bitmap)
+        }
+    }
 
 }

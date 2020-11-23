@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.social.socialvideo.entities.AddProfileRequest
-import com.social.socialvideo.entities.UploadResponse
+import com.social.socialvideo.entities.*
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.network.RestApiService
 import com.social.socialvideo.network.retrofit
@@ -36,6 +35,13 @@ class ProfileViewModel : ViewModel() {
     var _uploadStatus = MutableLiveData<ServerResponse>()
     val uploadStatus: LiveData<ServerResponse>
         get() = _uploadStatus
+    var _userInfo = MutableLiveData<UserInfoResponse>()
+    val userInfo : LiveData<UserInfoResponse>
+        get() = _userInfo
+    var _userInfoStatus = MutableLiveData<ServerResponse>()
+    val userInfoStatus : LiveData<ServerResponse>
+        get() = _userInfoStatus
+
 
     init{
 
@@ -80,7 +86,7 @@ class ProfileViewModel : ViewModel() {
 
         loginResponse.enqueue(object : Callback<UploadResponse> {
             override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
-                _uploadStatus.value = ServerResponse.SERVER_ERROR
+
             }
             override fun onResponse(
                 call: Call<UploadResponse>?,
@@ -88,11 +94,37 @@ class ProfileViewModel : ViewModel() {
             ) {
                 if(response?.code() == 200){
                     _uploadStatus.value = ServerResponse.SERVER_SUCCESS
-                } else {
-                    _uploadStatus.value = ServerResponse.SERVER_ERROR
                 }
             }
         })
     }
 
+    fun resolveProfilePicture(token: String) {
+        val userInfoRequest = initUserInfoRequest(token)
+        val apiService = retrofit.create(RestApiService::class.java)
+        val loginResponse: Call<UserInfoResponse> = apiService.userInfo(userInfoRequest)
+
+        loginResponse.enqueue(object : Callback<UserInfoResponse> {
+            override fun onFailure(call: Call<UserInfoResponse>?, t: Throwable?) {
+                _userInfoStatus.value = ServerResponse.SERVER_ERROR
+            }
+            override fun onResponse(
+                call: Call<UserInfoResponse>?,
+                response: Response<UserInfoResponse>?
+            ) {
+                if(response?.code() == 200) {
+                    _userInfo.value = response.body()
+                    _userInfoStatus.value = ServerResponse.SERVER_SUCCESS
+                }else{
+                    _userInfoStatus.value = ServerResponse.SERVER_ERROR
+                }
+            }
+        })
+    }
+
+    private fun initUserInfoRequest(token: String): UserInfoRequest {
+        val userInfoRequest = UserInfoRequest()
+        userInfoRequest.token = token
+        return userInfoRequest
+    }
 }
