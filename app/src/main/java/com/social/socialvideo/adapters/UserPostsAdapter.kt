@@ -33,8 +33,6 @@ class UserPostsAdapter : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.userName.text = item.surname
-        holder.uploadDate.text = "12.3.1996"
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

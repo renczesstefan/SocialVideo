@@ -6,3 +6,11 @@ data class UserPost(
     val videourl: String,
     val username: String,
     val profile: String)
+
+data class UserProfile(
+    val id: String,
+    val username: String,
+    val email: String,
+    val token: String,
+    val refresh: String,
+    val profile: String)

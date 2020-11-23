@@ -12,12 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.social.socialvideo.R
 import com.social.socialvideo.databinding.ProfileBinding
 import com.social.socialvideo.entities.UserInfoResponse
@@ -46,13 +50,20 @@ class ProfileFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
 
         // Get the viewmodel
-        profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        profileViewModel = ViewModelProvider(this, ProfileViewModel.Factory(sessionManager.fetchAuthToken().toString())).get(ProfileViewModel::class.java)
         binding.profileViewModel = profileViewModel
 
-        profileViewModel.userInfo.observe(viewLifecycleOwner, Observer { userInfo ->
-            resolveProfilePic(userInfo)
+
+        profileViewModel.url.observe(viewLifecycleOwner, Observer { url ->
+            if(url != ""){
+                refreshProfilePicture(url)
+            }
         })
 
+        /**
+        * Táto funkcia slúži na otvorenie galérie, z čoho budeme vybrať fotku. 9 znamená,
+         * že budeme vybrať fotku/video.
+        * */
         profileViewModel.addImage.observe(viewLifecycleOwner, Observer { addImage ->
             if(addImage){
                 val intent = Intent()
@@ -88,7 +99,6 @@ class ProfileFragment : Fragment() {
     private fun resolveUploadStatus(status: ServerResponse?) {
         when (status){
             ServerResponse.SERVER_SUCCESS -> {
-                this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                 Toast.makeText(context, "Profile picture was successfully!", Toast.LENGTH_SHORT).show()
             }
             ServerResponse.SERVER_ERROR -> {
@@ -104,6 +114,10 @@ class ProfileFragment : Fragment() {
         this.findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
     }
 
+    /**
+     * Automaticky sa spustí po vybratí fotky. Spracováva dáta vybranej fotky, a spustí upload
+     * pomocou profileViewModelu
+     * */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 9 && resultCode == RESULT_OK && data != null){
@@ -113,12 +127,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun resolveProfilePic(userInfo: UserInfoResponse){
-        if(userInfo.profile != null && userInfo.profile != ""){
-            val inputStr: InputStream = URL("http://api.mcomputing.eu/mobv/uploads/" + userInfo.profile).openStream() as InputStream
-            val bitmap: Bitmap = BitmapFactory.decodeStream(inputStr)
-            binding.profileImage.setImageBitmap(bitmap)
-        }
+    private fun refreshProfilePicture(url: String){
+        Glide.with(this)
+            .load(url).apply(RequestOptions.skipMemoryCacheOf(true))
+            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+            .into(binding.profileImage)
     }
 
 }

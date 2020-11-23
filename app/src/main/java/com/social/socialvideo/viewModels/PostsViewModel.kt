@@ -4,13 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.social.socialvideo.db.UserPostRepository
-import com.social.socialvideo.db.entities.DatabaseUserPost
-import com.social.socialvideo.db.entities.getDatabase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.social.socialvideo.db.entities.dao.getDatabase
 
 /**
  * @param application The application that this viewmodel is attached to, it's safe to hold a
@@ -19,7 +14,11 @@ import kotlinx.coroutines.withContext
  * */
 class PostsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val videosRepository = UserPostRepository(getDatabase(application))
+    private val videosRepository = UserPostRepository(
+        getDatabase(
+            application
+        )
+    )
 
     // Sluzi na zabezpecenie poslania application contextu z fragmentu do viewModelu
     // application potrebujeme na ziskanie repozitaru ktorz pracuje s databazou

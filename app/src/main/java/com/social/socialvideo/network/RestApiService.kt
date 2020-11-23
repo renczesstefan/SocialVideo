@@ -1,6 +1,7 @@
 package com.social.socialvideo.network
 
 import com.social.socialvideo.entities.*
+import com.social.socialvideo.rest.entities.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
