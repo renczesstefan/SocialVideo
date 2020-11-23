@@ -35,10 +35,4 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
 
     val postList = videosRepository.posts
 
-    init {
-        viewModelScope.launch {
-            videosRepository.addPost()
-        }
-    }
-
 }

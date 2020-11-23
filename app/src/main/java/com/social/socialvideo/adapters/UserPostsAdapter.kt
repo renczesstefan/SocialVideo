@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.social.socialvideo.R
 import com.social.socialvideo.domain.UserPost
-import com.social.socialvideo.utils.TextItemViewHolder
 
 class UserPostsAdapter : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
 
@@ -26,7 +25,6 @@ class UserPostsAdapter : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
         val view = layoutInflater
             .inflate(R.layout.user_post, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +33,6 @@ class UserPostsAdapter : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-
         holder.userName.text = item.surname
         holder.uploadDate.text = "12.3.1996"
     }

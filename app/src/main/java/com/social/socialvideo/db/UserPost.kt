@@ -7,18 +7,20 @@ import com.social.socialvideo.domain.UserPost
 @Entity
 data class DatabaseUserPost constructor(
     @PrimaryKey
-    val userName: String,
-    val profilePhoto : String,
-    val name: String,
-    val surname: String,
+    val postid: String,
+    val created: String,
+    val videourl: String,
+    val username: String,
+    val profile: String
 )
 fun List<DatabaseUserPost>.asDomainModel(): List<UserPost> {
     return map {
         UserPost(
-            userName = it.userName,
-            profilePhoto = it.profilePhoto,
-            name = it.name,
-            surname = it.surname)
+            postid = it.postid,
+            created = it.created,
+            videourl = it.videourl,
+            username = it.username,
+            profile = it.profile)
     }
 }
 

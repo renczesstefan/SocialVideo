@@ -2,7 +2,6 @@ package com.social.socialvideo.db
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.social.socialvideo.db.entities.DatabaseUserPost
 import com.social.socialvideo.db.entities.UserPostDatabase
 import com.social.socialvideo.db.entities.asDomainModel
 import com.social.socialvideo.domain.UserPost
@@ -17,13 +16,9 @@ class UserPostRepository(private val database: UserPostDatabase) {
             it.asDomainModel()
         }
 
-    suspend fun addPost() {
+    suspend fun addUserPosts() {
         withContext(Dispatchers.IO) {
-
-            database.userPostDao.insert(DatabaseUserPost("a","b","c","d"))
-            database.userPostDao.insert(DatabaseUserPost("b","qwe","qwe","qwe"))
-            database.userPostDao.insert(DatabaseUserPost("c","asdsad","qweewqq","zxczxczxc"))
-            database.userPostDao.insert(DatabaseUserPost("d","fsdafsda","sfdsdaf","sfdsdf"))
+            // TODO
         }
     }
 

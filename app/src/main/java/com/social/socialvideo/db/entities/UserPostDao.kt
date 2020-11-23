@@ -10,7 +10,9 @@ interface UserPostDao {
     fun getVideos(): LiveData<List<DatabaseUserPost>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert( videos: DatabaseUserPost)
+    fun insertAll(videos: DatabaseUserPost)
+
+
 }
 
 @Database(entities = [DatabaseUserPost::class], version = 1)
