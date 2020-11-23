@@ -62,11 +62,11 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         }
     }
 
-    /*init{
+    init{
         viewModelScope.launch {
             resolveProfilePicture(token)
         }
-    }*/
+    }
 
     fun onLogout() {
         _onLogout.value = true
