@@ -4,10 +4,10 @@ package com.social.socialvideo.db
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.social.socialvideo.db.entities.asDomainModel
-import com.social.socialvideo.db.entities.dao.SocialVideoDatabase
+import com.social.socialvideo.db.dao.SocialVideoDatabase
 import com.social.socialvideo.domain.UserProfile
-import com.social.socialvideo.entities.UserInfoRequest
-import com.social.socialvideo.entities.UserInfoResponse
+import com.social.socialvideo.network.entities.UserInfoRequest
+import com.social.socialvideo.network.entities.UserInfoResponse
 import com.social.socialvideo.network.RestApiService
 import com.social.socialvideo.network.retrofit
 import kotlinx.coroutines.Dispatchers

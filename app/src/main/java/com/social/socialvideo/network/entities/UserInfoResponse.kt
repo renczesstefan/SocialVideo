@@ -1,4 +1,4 @@
-package com.social.socialvideo.entities
+package com.social.socialvideo.network.entities
 
 class UserInfoResponse {
     lateinit var id: String

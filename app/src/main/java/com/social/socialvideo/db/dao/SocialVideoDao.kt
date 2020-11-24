@@ -1,4 +1,4 @@
-package com.social.socialvideo.db.entities.dao
+package com.social.socialvideo.db.dao
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -14,7 +14,7 @@ interface UserPostsDao {
     fun getVideos(): LiveData<List<DatabaseUserPost>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(videos: DatabaseUserPost)
+    fun insertAll(vararg videos: DatabaseUserPost)
 
 
 }

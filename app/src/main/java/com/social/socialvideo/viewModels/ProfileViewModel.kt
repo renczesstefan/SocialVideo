@@ -1,20 +1,14 @@
 package com.social.socialvideo.viewModels
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.widget.ImageView
 import androidx.lifecycle.*
 import com.google.gson.Gson
-import com.social.socialvideo.entities.AddProfileRequest
-import com.social.socialvideo.entities.UploadResponse
-import com.social.socialvideo.entities.UserInfoRequest
-import com.social.socialvideo.entities.UserInfoResponse
+import com.social.socialvideo.network.entities.AddProfileRequest
+import com.social.socialvideo.network.entities.UploadResponse
+import com.social.socialvideo.network.entities.UserInfoRequest
+import com.social.socialvideo.network.entities.UserInfoResponse
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.network.RestApiService
 import com.social.socialvideo.network.retrofit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -23,11 +17,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.InputStream
-import java.net.URL
 
 
 class ProfileViewModel(private val token: String) : ViewModel() {
+
+    var _onUserPostsNavigate = MutableLiveData<Boolean>()
+    val onUserPostsNavigate: LiveData<Boolean>
+        get() = _onUserPostsNavigate
     var _onLogout = MutableLiveData<Boolean>()
     val onLogout: LiveData<Boolean>
         get() = _onLogout
@@ -62,13 +58,11 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         }
     }
 
-    init{
+    init {
         viewModelScope.launch {
             resolveProfilePicture(token)
         }
     }
-
-
 
     fun onLogout() {
         _onLogout.value = true
@@ -90,9 +84,17 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         _addImage.value = true
     }
 
-    fun resetState(){
+    fun resetState() {
         _addImage.value = false
         _uploadStatus.value = ServerResponse.DEFAULT
+    }
+
+    fun onUserPostsNavigate() {
+        _onUserPostsNavigate.value = true
+    }
+
+    fun resetUserPostsNavigate() {
+        _onUserPostsNavigate.value = false
     }
 
     fun uploadProfilePic(path: String, token: String){
@@ -105,20 +107,19 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         val image = MultipartBody.Part.createFormData("image", rawFile.name, imageRequest)
 
         val apiService = retrofit.create(RestApiService::class.java)
-        val loginResponse: Call<UploadResponse> = apiService.uploadProfilePic(image, data)
+        val uploadResponse: Call<UploadResponse> = apiService.uploadProfilePic(image, data)
 
-        loginResponse.enqueue(object : Callback<UploadResponse> {
+        uploadResponse.enqueue(object : Callback<UploadResponse> {
+
             override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
                 _uploadStatus.value = ServerResponse.SERVER_ERROR
             }
-            override fun onResponse(
-                call: Call<UploadResponse>?,
-                response: Response<UploadResponse>?
-            ) {
-                if(response?.code() == 200){
+
+            override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {
+                if (response?.code() == 200) {
                     _uploadStatus.value = ServerResponse.SERVER_SUCCESS
                     resolveProfilePicture(token)
-                }else{
+                } else {
                     _uploadStatus.value = ServerResponse.SERVER_ERROR
                 }
             }
@@ -128,22 +129,21 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     fun resolveProfilePicture(token: String) {
         val userInfoRequest = initUserInfoRequest(token)
         val apiService = retrofit.create(RestApiService::class.java)
-        val loginResponse: Call<UserInfoResponse> = apiService.userInfo(userInfoRequest)
+        val userInfoResponse: Call<UserInfoResponse> = apiService.userInfo(userInfoRequest)
 
-        loginResponse.enqueue(object : Callback<UserInfoResponse> {
+        userInfoResponse.enqueue(object : Callback<UserInfoResponse> {
+
             override fun onFailure(call: Call<UserInfoResponse>?, t: Throwable?) {
                 _userInfoStatus.value = ServerResponse.SERVER_ERROR
             }
-            override fun onResponse(
-                call: Call<UserInfoResponse>?,
-                response: Response<UserInfoResponse>?
-            ) {
-                if(response?.code() == 200) {
+
+            override fun onResponse(call: Call<UserInfoResponse>?, response: Response<UserInfoResponse>?) {
+                if (response?.code() == 200) {
                     _userInfo.value = response.body()
                     _url.value = "http://api.mcomputing.eu/mobv/uploads/" + _userInfo.value?.profile
                     _userInfoStatus.value = ServerResponse.SERVER_SUCCESS
 
-                }else{
+                } else {
                     _userInfoStatus.value = ServerResponse.SERVER_ERROR
                 }
             }

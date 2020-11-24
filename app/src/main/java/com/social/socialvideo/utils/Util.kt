@@ -28,18 +28,16 @@ class PasswordUtil {
 
 object ConstantVariables {
 
-    val apiKey = "yV1rW0bG2rQ4nD6mI0aQ5iW2dA6kH5"
+    const val API_KEY = "yV1rW0bG2rQ4nD6mI0aQ5iW2dA6kH5"
+    const val USER_POSTS = "posts"
+    const val USER_PROFILE = "userProfile"
 }
 
 object PathUtils {
     fun getPath(context: Context, uri: Uri): String? {
 
         // DocumentProvider
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(
-                context,
-                uri
-            )
-        ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
             if (isExternalStorageDocument(uri)) { // ExternalStorageProvider
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":").toTypedArray()
