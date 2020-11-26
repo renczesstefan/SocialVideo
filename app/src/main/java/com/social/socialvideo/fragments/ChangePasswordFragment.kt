@@ -22,16 +22,14 @@ class ChangePasswordFragment : Fragment() {
     lateinit private var sessionManager: SessionManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        // Slúži na optimálnejšie nájdenie data fieldov pre fragment netreba používať R, findId...
         binding = DataBindingUtil.inflate(
             inflater, R.layout.change_password, container, false)
         sessionManager = SessionManager(this.requireContext())
-        // Get the viewmodel
         changePasswordViewModel = ViewModelProvider(this).get(ChangePasswordViewModel::class.java)
         changePasswordViewModel.token = sessionManager.fetchAuthToken().toString()
         binding.changePasswordViewModel = changePasswordViewModel
 
-        changePasswordViewModel.onChange.observe(viewLifecycleOwner, Observer { changeResponse ->
+        changePasswordViewModel.onChangeResponse.observe(viewLifecycleOwner, Observer { changeResponse ->
             if(changeResponse != ServerResponse.DEFAULT){
                 resolveOnChangeResponse(changeResponse)
                 changePasswordViewModel.resetOnChange()

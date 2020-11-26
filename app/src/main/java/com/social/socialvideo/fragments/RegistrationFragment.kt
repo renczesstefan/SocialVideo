@@ -23,13 +23,10 @@ class RegistrationFragment : Fragment() {
 
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-                // Slúži na optimálnejšie nájdenie data fieldov pre fragment netreba používať R, findId...
                 binding = DataBindingUtil.inflate(
                         inflater, R.layout.registration, container, false)
-                // Get the viewmodel
                 registrationViewModel = ViewModelProvider(this).get(RegistrationViewModel::class.java)
                 binding.registrationViewModel = registrationViewModel
-
                 registrationViewModel.onUserRegistration.observe(viewLifecycleOwner, Observer { response ->
                         resolveUserRegistration(response)
                 })

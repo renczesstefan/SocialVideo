@@ -9,14 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.social.socialvideo.R
 import com.social.socialvideo.domain.UserPost
 
+/**
+ * Adapter pre recycle view pre posts
+ * */
 class UserPostsAdapter : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
 
     var data: List<UserPost> = emptyList()
         set(value) {
             field = value
-
-            // Notify any registered observers that the data set has changed. This will cause every
-            // element in our RecyclerView to be invalidated.
+            //Potrebujeme notifikovat ze sa data zmenili, co zapricini ze sa invalidatnu itemy
             notifyDataSetChanged()
         }
 

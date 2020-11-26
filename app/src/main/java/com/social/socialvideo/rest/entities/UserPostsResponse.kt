@@ -1,10 +1,5 @@
-package com.social.socialvideo.network.entities
+package com.social.socialvideo.rest.entities
 
-import com.squareup.moshi.JsonClass
-
-
-
-@JsonClass(generateAdapter = true)
 data class UserPostsResponse (
      val postid: String,
      val created: String,

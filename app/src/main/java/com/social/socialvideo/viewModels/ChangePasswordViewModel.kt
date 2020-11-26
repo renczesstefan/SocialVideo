@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.social.socialvideo.rest.entities.ChangePasswordRequest
 import com.social.socialvideo.rest.entities.ChangePasswordResponse
 import com.social.socialvideo.enums.ServerResponse
-import com.social.socialvideo.network.RestApiService
-import com.social.socialvideo.network.retrofit
+import com.social.socialvideo.rest.services.RestApiService
+import com.social.socialvideo.rest.services.retrofit
 import com.social.socialvideo.utils.PasswordUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,9 +17,9 @@ class ChangePasswordViewModel : ViewModel() {
     var oldpassword = MutableLiveData<String>()
     var newpassword = MutableLiveData<String>()
     var newpasswordConfirm = MutableLiveData<String>()
-    var _onChange = MutableLiveData<ServerResponse>()
-    val onChange: LiveData<ServerResponse>
-        get() = _onChange
+    var _onChangeResponse = MutableLiveData<ServerResponse>()
+    val onChangeResponse: LiveData<ServerResponse>
+        get() = _onChangeResponse
     var token: String = ""
     var _newToken = MutableLiveData<String>()
     val newToken: LiveData<String>
@@ -31,13 +31,14 @@ class ChangePasswordViewModel : ViewModel() {
     fun onChange() {
         if (PasswordUtil.checkMatchingPasswords(newpassword.value, newpasswordConfirm.value)) {
             val changePasswordRequest = initChangePasswordRequest()
-            val apiService = retrofit.create(RestApiService::class.java)
+            val apiService = retrofit.create(
+                RestApiService::class.java)
             val loginResponse: Call<ChangePasswordResponse> =
                 apiService.changePassword(changePasswordRequest)
 
             loginResponse.enqueue(object : Callback<ChangePasswordResponse> {
                 override fun onFailure(call: Call<ChangePasswordResponse>?, t: Throwable?) {
-                    _onChange.value = ServerResponse.SERVER_ERROR
+                    _onChangeResponse.value = ServerResponse.SERVER_ERROR
                 }
                 override fun onResponse(
                     call: Call<ChangePasswordResponse>?,
@@ -46,14 +47,14 @@ class ChangePasswordViewModel : ViewModel() {
                     if (response?.code() == 200) {
                         _newToken.value = response?.body()?.token
                         _newRefreshToken.value = response?.body()?.token
-                        _onChange.value = ServerResponse.SERVER_SUCCESS
+                        _onChangeResponse.value = ServerResponse.SERVER_SUCCESS
                     } else {
-                        _onChange.value = ServerResponse.SERVER_ERROR
+                        _onChangeResponse.value = ServerResponse.SERVER_ERROR
                     }
                 }
             })
         } else {
-            _onChange.value = ServerResponse.PASSWORD_MISMATCH
+            _onChangeResponse.value = ServerResponse.PASSWORD_MISMATCH
             oldpassword.value = ""
             newpassword.value = ""
             newpasswordConfirm.value = ""
@@ -61,7 +62,7 @@ class ChangePasswordViewModel : ViewModel() {
     }
 
     fun resetOnChange() {
-        _onChange.value = ServerResponse.DEFAULT
+        _onChangeResponse.value = ServerResponse.DEFAULT
     }
 
     private fun initChangePasswordRequest(): ChangePasswordRequest {

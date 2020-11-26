@@ -1,25 +1,21 @@
 package com.social.socialvideo.fragments
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.social.socialvideo.R
 import com.social.socialvideo.adapters.UserPostsAdapter
 import com.social.socialvideo.databinding.PostsBinding
 import com.social.socialvideo.domain.UserPost
-import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.viewModels.PostsViewModel
 
 class PostsFragment : Fragment() {
-
 
     private lateinit var binding: PostsBinding
     private lateinit var postsViewModel: PostsViewModel
@@ -34,13 +30,16 @@ class PostsFragment : Fragment() {
             "Only no null activity is required"
         }
         postsViewModel = ViewModelProvider(this, PostsViewModel.Factory(activity.application)).get(PostsViewModel::class.java)
-
         binding.postsViewModel = postsViewModel
-
         userPostsAdapter = UserPostsAdapter()
-
         binding.userPosts.adapter = userPostsAdapter
-
+        postsViewModel.onUserRecordsNavigate.observe(viewLifecycleOwner, Observer { userPosts ->
+            if (userPosts) {
+                this.findNavController()
+                    .navigate(R.id.action_postsFragment_to_recordVideoFragment)
+                postsViewModel.resetRecordVideoNavigate()
+            }
+        })
         return binding.root
     }
 

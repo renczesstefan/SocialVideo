@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.social.socialvideo.rest.entities.LoginRequest
 import com.social.socialvideo.rest.entities.LoginResponse
 import com.social.socialvideo.enums.ServerResponse
-import com.social.socialvideo.network.RestApiService
-import com.social.socialvideo.network.retrofit
+import com.social.socialvideo.rest.services.RestApiService
+import com.social.socialvideo.rest.services.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

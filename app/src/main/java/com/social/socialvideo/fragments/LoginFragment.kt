@@ -24,15 +24,15 @@ class LoginFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val sessionManager = SessionManager(this.requireContext())
-
-        // Slúži na optimálnejšie nájdenie data fieldov pre fragment netreba používať R, findId...
         binding = DataBindingUtil.inflate(
             inflater, R.layout.login, container, false)
-        // Get the viewmodel
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.loginViewModel = loginViewModel
 
-        // checking if user is logged in
+        /**
+         * Kontrola, ci uz bol uzivatel prihlaseny a teda ci obsahuje sessionManager token
+         * Pri logoute tento token mazeme a teda je pouzivatel nuteny sa znova prihlasit
+         * */
         if(!sessionManager.fetchAuthToken().isNullOrBlank()){
             this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
         } else {
@@ -81,7 +81,5 @@ class LoginFragment : Fragment() {
             }
             else -> {}
         }
-
     }
-
 }

@@ -1,7 +1,6 @@
-package com.social.socialvideo.network
+package com.social.socialvideo.rest.services
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.social.socialvideo.network.entities.*
 import com.social.socialvideo.rest.entities.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

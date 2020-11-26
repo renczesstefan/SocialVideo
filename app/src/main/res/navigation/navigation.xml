@@ -47,6 +47,18 @@
     <fragment
         android:id="@+id/postsFragment"
         android:name="com.social.socialvideo.fragments.PostsFragment"
-        android:label="PostsFragment" />
+        android:label="PostsFragment" >
+        <action
+            android:id="@+id/action_postsFragment_to_recordVideoFragment"
+            app:destination="@id/recordVideoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordVideoFragment"
+        android:name="com.social.socialvideo.fragments.RecordVideoFragment"
+        android:label="RecordVideoFragment" >
+        <action
+            android:id="@+id/action_recordVideoFragment_to_postsFragment"
+            app:destination="@id/postsFragment" />
+    </fragment>
 
 </navigation>

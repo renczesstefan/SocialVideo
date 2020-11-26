@@ -1,13 +1,10 @@
 package com.social.socialvideo.viewModels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.social.socialvideo.db.UserPostRepository
 import com.social.socialvideo.db.dao.getDatabase
-import com.social.socialvideo.network.entities.UserPostsRequest
+import com.social.socialvideo.rest.entities.UserPostsRequest
 import com.social.socialvideo.services.SessionManager
 import kotlinx.coroutines.launch
 
@@ -18,6 +15,10 @@ import kotlinx.coroutines.launch
  * */
 class PostsViewModel(application: Application) : AndroidViewModel(application) {
 
+    var _onUserRecordsNavigate = MutableLiveData<Boolean>()
+    val onUserRecordsNavigate: LiveData<Boolean>
+        get() = _onUserRecordsNavigate
+
     private val videosRepository = UserPostRepository(
         getDatabase(application)
     )
@@ -25,7 +26,8 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
     init {
         viewModelScope.launch {
             val sessionManager = SessionManager(application.applicationContext)
-            val userPostRequest = UserPostsRequest()
+            val userPostRequest =
+                UserPostsRequest()
             userPostRequest.token = sessionManager.fetchAuthToken().toString()
             videosRepository.insertUserPosts(userPostRequest)
         }
@@ -41,6 +43,14 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
+    }
+
+    fun recordVideoNavigate() {
+        _onUserRecordsNavigate.value = true
+    }
+
+    fun resetRecordVideoNavigate() {
+        _onUserRecordsNavigate.value = false
     }
 
     val postList = videosRepository.posts

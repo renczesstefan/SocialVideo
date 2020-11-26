@@ -8,8 +8,8 @@ import com.social.socialvideo.rest.entities.CheckUsernameResponse
 import com.social.socialvideo.rest.entities.RegistrationRequest
 import com.social.socialvideo.rest.entities.RegistrationResponse
 import com.social.socialvideo.enums.ServerResponse
-import com.social.socialvideo.network.RestApiService
-import com.social.socialvideo.network.retrofit
+import com.social.socialvideo.rest.services.RestApiService
+import com.social.socialvideo.rest.services.retrofit
 import com.social.socialvideo.utils.PasswordUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,8 @@ class RegistrationViewModel : ViewModel() {
         get() = _onUserRegistration
 
     fun registerUser() {
-        val apiService = retrofit.create(RestApiService::class.java)
+        val apiService = retrofit.create(
+            RestApiService::class.java)
         val checkUsernameRequest = CheckUsernameRequest()
         checkUsernameRequest.username = userId.value.toString()
         val checkUsernameResponse: Call<CheckUsernameResponse> =
@@ -43,11 +44,7 @@ class RegistrationViewModel : ViewModel() {
                 if (response?.code() == 200 && response.body()!!.exists) {
                     _onUserRegistration.value = ServerResponse.USER_ALREADY_EXISTS
                 } else {
-                    if (_onUserRegistration.value != ServerResponse.USER_ALREADY_EXISTS && !PasswordUtil.checkMatchingPasswords(
-                            password.value,
-                            passwordConfirmation.value
-                        )
-                    ) {
+                    if (_onUserRegistration.value != ServerResponse.USER_ALREADY_EXISTS && !PasswordUtil.checkMatchingPasswords(password.value, passwordConfirmation.value)) {
                         _onUserRegistration.value = ServerResponse.PASSWORD_MISMATCH
                         password.value = ""
                         passwordConfirmation.value = ""
@@ -59,10 +56,7 @@ class RegistrationViewModel : ViewModel() {
                                 _onUserRegistration.value = ServerResponse.SERVER_ERROR
                             }
 
-                            override fun onResponse(
-                                call: Call<RegistrationResponse>?,
-                                response: Response<RegistrationResponse>?
-                            ) {
+                            override fun onResponse(call: Call<RegistrationResponse>?,response: Response<RegistrationResponse>?) {
                                 _onUserRegistration.value = ServerResponse.SERVER_SUCCESS
                             }
                         })

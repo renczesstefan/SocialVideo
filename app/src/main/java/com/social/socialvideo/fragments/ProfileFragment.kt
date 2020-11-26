@@ -33,16 +33,11 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         sessionManager = SessionManager(this.requireContext())
-        // Slúži na optimálnejšie nájdenie data fieldov pre fragment netreba používať R, findId...
         binding = DataBindingUtil.inflate(
             inflater, R.layout.profile, container, false)
-
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-
-        // Get the viewmodel
         profileViewModel = ViewModelProvider(this, ProfileViewModel.Factory(sessionManager.fetchAuthToken().toString())).get(ProfileViewModel::class.java)
         binding.profileViewModel = profileViewModel
-
 
         profileViewModel.url.observe(viewLifecycleOwner, Observer { url ->
             if (url != "http://api.mcomputing.eu/mobv/uploads/") {

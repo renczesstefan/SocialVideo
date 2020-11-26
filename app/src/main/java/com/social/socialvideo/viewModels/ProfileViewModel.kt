@@ -2,13 +2,13 @@ package com.social.socialvideo.viewModels
 
 import androidx.lifecycle.*
 import com.google.gson.Gson
-import com.social.socialvideo.network.entities.AddProfileRequest
-import com.social.socialvideo.network.entities.UploadResponse
-import com.social.socialvideo.network.entities.UserInfoRequest
-import com.social.socialvideo.network.entities.UserInfoResponse
+import com.social.socialvideo.rest.entities.AddProfileRequest
+import com.social.socialvideo.rest.entities.UploadResponse
+import com.social.socialvideo.rest.entities.UserInfoRequest
+import com.social.socialvideo.rest.entities.UserInfoResponse
 import com.social.socialvideo.enums.ServerResponse
-import com.social.socialvideo.network.RestApiService
-import com.social.socialvideo.network.retrofit
+import com.social.socialvideo.rest.services.RestApiService
+import com.social.socialvideo.rest.services.retrofit
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -106,7 +106,8 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         val imageRequest = RequestBody.create(MediaType.parse("image/jpeg"), rawFile)
         val image = MultipartBody.Part.createFormData("image", rawFile.name, imageRequest)
 
-        val apiService = retrofit.create(RestApiService::class.java)
+        val apiService = retrofit.create(
+            RestApiService::class.java)
         val uploadResponse: Call<UploadResponse> = apiService.uploadProfilePic(image, data)
 
         uploadResponse.enqueue(object : Callback<UploadResponse> {
@@ -128,7 +129,8 @@ class ProfileViewModel(private val token: String) : ViewModel() {
 
     fun resolveProfilePicture(token: String) {
         val userInfoRequest = initUserInfoRequest(token)
-        val apiService = retrofit.create(RestApiService::class.java)
+        val apiService = retrofit.create(
+            RestApiService::class.java)
         val userInfoResponse: Call<UserInfoResponse> = apiService.userInfo(userInfoRequest)
 
         userInfoResponse.enqueue(object : Callback<UserInfoResponse> {
@@ -151,7 +153,8 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     }
 
     private fun initUserInfoRequest(token: String): UserInfoRequest {
-        val userInfoRequest = UserInfoRequest()
+        val userInfoRequest =
+            UserInfoRequest()
         userInfoRequest.token = token
         return userInfoRequest
     }

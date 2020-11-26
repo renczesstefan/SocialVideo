@@ -1,4 +1,4 @@
-package com.social.socialvideo.network.entities
+package com.social.socialvideo.rest.entities
 
 import com.social.socialvideo.utils.ConstantVariables
 
