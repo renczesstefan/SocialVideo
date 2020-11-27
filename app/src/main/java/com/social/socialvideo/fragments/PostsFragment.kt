@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.social.socialvideo.R
 import com.social.socialvideo.adapters.UserPostsAdapter
 import com.social.socialvideo.databinding.PostsBinding
@@ -21,6 +22,7 @@ class PostsFragment : Fragment() {
     private lateinit var postsViewModel: PostsViewModel
     private var userPostsAdapter: UserPostsAdapter? = null
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = DataBindingUtil.inflate(
@@ -31,8 +33,9 @@ class PostsFragment : Fragment() {
         }
         postsViewModel = ViewModelProvider(this, PostsViewModel.Factory(activity.application)).get(PostsViewModel::class.java)
         binding.postsViewModel = postsViewModel
-        userPostsAdapter = UserPostsAdapter()
+        userPostsAdapter = UserPostsAdapter(requireActivity())
         binding.userPosts.adapter = userPostsAdapter
+
         postsViewModel.onUserRecordsNavigate.observe(viewLifecycleOwner, Observer { userPosts ->
             if (userPosts) {
                 this.findNavController()
@@ -40,6 +43,16 @@ class PostsFragment : Fragment() {
                 postsViewModel.resetRecordVideoNavigate()
             }
         })
+
+        postsViewModel.onUserProfileNavigate.observe(viewLifecycleOwner, Observer { userProfile ->
+            if (userProfile) {
+                this.findNavController()
+                    .navigate(R.id.action_postsFragment_to_profileFragment)
+                postsViewModel.resetUserProfileNavigate()
+            }
+        })
+
+        SimpleExoPlayer.Builder(requireContext()).build()
         return binding.root
     }
 
@@ -56,4 +69,6 @@ class PostsFragment : Fragment() {
             }
         })
     }
+
+
 }

@@ -6,23 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/user_name"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/holo_green_light"
-        tools:layout_editor_absoluteX="163dp" />
 
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
+
+        android:layout_marginBottom="16dp"
         android:src="@drawable/lukasenko"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

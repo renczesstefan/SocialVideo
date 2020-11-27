@@ -19,6 +19,11 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
     val onUserRecordsNavigate: LiveData<Boolean>
         get() = _onUserRecordsNavigate
 
+    var _onUserProfileNavigate = MutableLiveData<Boolean>()
+    val onUserProfileNavigate: LiveData<Boolean>
+        get() = _onUserProfileNavigate
+
+
     private val videosRepository = UserPostRepository(
         getDatabase(application)
     )
@@ -51,6 +56,14 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun resetRecordVideoNavigate() {
         _onUserRecordsNavigate.value = false
+    }
+
+    fun userProfileNavigate() {
+        _onUserProfileNavigate.value = true
+    }
+
+    fun resetUserProfileNavigate() {
+        _onUserProfileNavigate.value = false
     }
 
     val postList = videosRepository.posts

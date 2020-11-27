@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_postsFragment_to_recordVideoFragment"
             app:destination="@id/recordVideoFragment" />
+        <action
+            android:id="@+id/action_postsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/recordVideoFragment"
