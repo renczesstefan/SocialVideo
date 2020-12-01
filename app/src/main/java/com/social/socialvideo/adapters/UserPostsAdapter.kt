@@ -49,11 +49,15 @@ class UserPostsAdapter(private val context: Context) :
         holder.uploadDate.text = item.created
 
         // Glide na renderovanie profilovej fotky
-        Glide.with(context)
-            .load("http://api.mcomputing.eu/mobv/uploads/" + item.profile)
-            .apply(RequestOptions.skipMemoryCacheOf(true))
-            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-            .into(holder.profilePhoto)
+        if(item.profile != "") {
+            Glide.with(context)
+                .load("http://api.mcomputing.eu/mobv/uploads/" + item.profile)
+                .apply(RequestOptions.skipMemoryCacheOf(true))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .into(holder.profilePhoto)
+        }else{
+            holder.profilePhoto.setBackgroundResource(R.drawable.defaut_user_profile_picture)
+        }
 
         // Exoplayer na prehravanie videi
         val player: SimpleExoPlayer = SimpleExoPlayer.Builder(context)

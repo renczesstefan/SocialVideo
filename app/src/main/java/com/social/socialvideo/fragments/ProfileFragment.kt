@@ -40,9 +40,7 @@ class ProfileFragment : Fragment() {
         binding.profileViewModel = profileViewModel
 
         profileViewModel.url.observe(viewLifecycleOwner, Observer { url ->
-            if (url != "http://api.mcomputing.eu/mobv/uploads/") {
-                refreshProfilePicture(url)
-            }
+            refreshProfilePicture(url)
         })
 
         /**
@@ -85,6 +83,12 @@ class ProfileFragment : Fragment() {
             binding.userID.text = userInfo.username
         })
 
+        profileViewModel.deletePic.observe(viewLifecycleOwner, Observer { deletePic ->
+            if(deletePic){
+                profileViewModel.deleteProfilePic(sessionManager.fetchAuthToken().toString())
+            }
+        })
+
         profileViewModel.onUserPostsNavigate.observe(viewLifecycleOwner, Observer { userPosts ->
             if (userPosts) {
                 this.findNavController()
@@ -99,10 +103,10 @@ class ProfileFragment : Fragment() {
     private fun resolveUploadStatus(status: ServerResponse?) {
         when (status) {
             ServerResponse.SERVER_SUCCESS -> {
-                Toast.makeText(context, "Profile picture was successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Profile picture was successfully updated!", Toast.LENGTH_SHORT).show()
             }
             ServerResponse.SERVER_ERROR -> {
-                Toast.makeText(context, "Upload of profile picture failed!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Update of profile picture failed!", Toast.LENGTH_SHORT).show()
             }
             else -> {}
         }
@@ -128,10 +132,21 @@ class ProfileFragment : Fragment() {
     }
 
     private fun refreshProfilePicture(url: String){
-        Glide.with(this)
-            .load(url).apply(RequestOptions.skipMemoryCacheOf(true))
-            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-            .into(binding.profileImage)
+        if(url != "" && url != "http://api.mcomputing.eu/mobv/uploads/") {
+            Glide.with(this)
+                .load(url).apply(RequestOptions.skipMemoryCacheOf(true))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .into(binding.profileImage)
+        }else{
+            Glide.with(this)
+                .load(getImage(R.drawable.defaut_user_profile_picture.toString())).apply(RequestOptions.skipMemoryCacheOf(true))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .into(binding.profileImage)
+        }
+    }
+
+    fun getImage(imageName: String?): Int {
+        return resources.getIdentifier(imageName, "drawable", this.requireContext().packageName)
     }
 
 }

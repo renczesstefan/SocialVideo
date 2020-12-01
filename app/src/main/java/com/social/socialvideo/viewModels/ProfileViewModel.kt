@@ -2,11 +2,8 @@ package com.social.socialvideo.viewModels
 
 import androidx.lifecycle.*
 import com.google.gson.Gson
-import com.social.socialvideo.rest.entities.AddProfileRequest
-import com.social.socialvideo.rest.entities.UploadResponse
-import com.social.socialvideo.rest.entities.UserInfoRequest
-import com.social.socialvideo.rest.entities.UserInfoResponse
 import com.social.socialvideo.enums.ServerResponse
+import com.social.socialvideo.rest.entities.*
 import com.social.socialvideo.rest.services.RestApiService
 import com.social.socialvideo.rest.services.retrofit
 import kotlinx.coroutines.launch
@@ -45,6 +42,9 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     var _url = MutableLiveData<String>()
     val url : LiveData<String>
         get() = _url
+    var _deletePic = MutableLiveData<Boolean>()
+    val deletePic : LiveData<Boolean>
+        get() = _deletePic
 
     // Sluzi na zabezpecenie poslania application contextu z fragmentu do viewModelu
     // application potrebujeme na ziskanie repozitaru ktorz pracuje s databazou
@@ -84,9 +84,38 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         _addImage.value = true
     }
 
+    fun deleteProfilePicture(){
+        _deletePic.value = true
+    }
+
+    fun deleteProfilePic(token: String) {
+        val requestData = DeletePhotoRequest()
+        requestData.token = token
+        val apiService = retrofit.create(
+            RestApiService::class.java)
+        val uploadResponse: Call<UploadResponse> = apiService.deletePhoto(requestData)
+
+        uploadResponse.enqueue(object : Callback<UploadResponse> {
+
+            override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
+                _uploadStatus.value = ServerResponse.SERVER_ERROR
+            }
+
+            override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {
+                if (response?.code() == 200) {
+                    _uploadStatus.value = ServerResponse.SERVER_SUCCESS
+                    _url.value = ""
+                } else {
+                    _uploadStatus.value = ServerResponse.SERVER_ERROR
+                }
+            }
+        })
+    }
+
     fun resetState() {
         _addImage.value = false
         _uploadStatus.value = ServerResponse.DEFAULT
+        _deletePic.value = false
     }
 
     fun onUserPostsNavigate() {
@@ -99,7 +128,7 @@ class ProfileViewModel(private val token: String) : ViewModel() {
 
     fun uploadProfilePic(path: String, token: String){
         val rawFile = File(path)
-        val rawData = AddProfileRequest()
+        val rawData = UploadFileRequest()
         rawData.token = token
 
         val data = RequestBody.create(MediaType.parse("application/json"), Gson().toJson(rawData))

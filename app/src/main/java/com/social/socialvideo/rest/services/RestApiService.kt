@@ -64,6 +64,9 @@ interface RestApiService {
     @POST("post.php")
     fun uploadVideo(@Part video: MultipartBody.Part, @Part("data") data: RequestBody): Call<UploadResponse>
 
+    @POST("service.php")
+    fun deletePhoto(@Body deleteInfo: DeletePhotoRequest): Call<UploadResponse>
+
 }
 
 
