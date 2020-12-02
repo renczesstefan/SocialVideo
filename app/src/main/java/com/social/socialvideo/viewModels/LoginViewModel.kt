@@ -34,23 +34,23 @@ class LoginViewModel : ViewModel() {
 
         loginResponse.enqueue(object : Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>?, t: Throwable?) {
-                _onUserLogin.value = ServerResponse.SERVER_ERROR
+                _onUserLogin.value = ServerResponse.CONNECTION_ERROR
             }
             override fun onResponse(
                 call: Call<LoginResponse>?,
                 response: Response<LoginResponse>?
             ) {
                 if(response?.code() == 200) {
-                    _userToken.value = response?.body()?.token
+                    _userToken.value = response.body()?.token
                     _onUserLogin.value = ServerResponse.SERVER_SUCCESS
-                }else{
+                } else {
                     _onUserLogin.value = ServerResponse.SERVER_ERROR
                 }
             }
         })
     }
 
-    fun loggedIn(){
+    fun resetOnUserLogin(){
         _onUserLogin.value = ServerResponse.DEFAULT
     }
     

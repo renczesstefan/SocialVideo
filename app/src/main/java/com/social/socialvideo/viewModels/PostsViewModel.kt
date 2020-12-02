@@ -34,7 +34,7 @@ class PostsViewModel(application: Application) : AndroidViewModel(application) {
             val userPostRequest =
                 UserPostsRequest()
             userPostRequest.token = sessionManager.fetchAuthToken().toString()
-            videosRepository.insertUserPosts(userPostRequest)
+            videosRepository.insertUserPosts(userPostRequest, application.applicationContext)
         }
     }
 

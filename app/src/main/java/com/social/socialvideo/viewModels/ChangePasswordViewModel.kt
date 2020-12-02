@@ -38,7 +38,7 @@ class ChangePasswordViewModel : ViewModel() {
 
             loginResponse.enqueue(object : Callback<ChangePasswordResponse> {
                 override fun onFailure(call: Call<ChangePasswordResponse>?, t: Throwable?) {
-                    _onChangeResponse.value = ServerResponse.SERVER_ERROR
+                    _onChangeResponse.value = ServerResponse.CONNECTION_ERROR
                 }
                 override fun onResponse(
                     call: Call<ChangePasswordResponse>?,

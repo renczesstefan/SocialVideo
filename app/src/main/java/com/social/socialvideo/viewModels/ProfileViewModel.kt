@@ -98,7 +98,7 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         uploadResponse.enqueue(object : Callback<UploadResponse> {
 
             override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
-                _uploadStatus.value = ServerResponse.SERVER_ERROR
+                _uploadStatus.value = ServerResponse.CONNECTION_ERROR
             }
 
             override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {
@@ -142,7 +142,7 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         uploadResponse.enqueue(object : Callback<UploadResponse> {
 
             override fun onFailure(call: Call<UploadResponse>?, t: Throwable?) {
-                _uploadStatus.value = ServerResponse.SERVER_ERROR
+                _uploadStatus.value = ServerResponse.CONNECTION_ERROR
             }
 
             override fun onResponse(call: Call<UploadResponse>?, response: Response<UploadResponse>?) {

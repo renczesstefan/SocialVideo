@@ -1,5 +1,7 @@
 package com.social.socialvideo.db
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.social.socialvideo.db.dao.SocialVideoDatabase
@@ -22,13 +24,17 @@ class UserPostRepository(private val database: SocialVideoDatabase) {
             it.asDomainModel()
         }
 
-    suspend fun insertUserPosts(userPostsRequest: UserPostsRequest) {
+    suspend fun insertUserPosts(userPostsRequest: UserPostsRequest, context: Context) {
         withContext(Dispatchers.IO) {
             val apiService = retrofit.create(
                 RestApiService::class.java)
-            val userPosts = apiService.userPosts(userPostsRequest).await()
-            val databaseUserPosts = asDatabaseModel(userPosts)
-            database.userPostsDao.insertAll(*databaseUserPosts)
+            try {
+                val userPosts = apiService.userPosts(userPostsRequest).await()
+                val databaseUserPosts = asDatabaseModel(userPosts)
+                database.userPostsDao.insertAll(*databaseUserPosts)
+            } catch (e: Exception) {
+            }
+
         }
     }
 

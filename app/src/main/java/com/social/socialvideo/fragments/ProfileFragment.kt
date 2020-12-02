@@ -84,7 +84,7 @@ class ProfileFragment : Fragment() {
         })
 
         profileViewModel.deletePic.observe(viewLifecycleOwner, Observer { deletePic ->
-            if(deletePic){
+            if (deletePic) {
                 profileViewModel.deleteProfilePic(sessionManager.fetchAuthToken().toString())
             }
         })
@@ -104,6 +104,11 @@ class ProfileFragment : Fragment() {
         when (status) {
             ServerResponse.SERVER_SUCCESS -> {
                 Toast.makeText(context, "Profile picture was successfully updated!", Toast.LENGTH_SHORT).show()
+                binding.imageView2.visibility = View.VISIBLE
+            }
+            ServerResponse.CONNECTION_ERROR -> {
+                Toast.makeText(context, "Uploading profile picture failed, internet connection error", Toast.LENGTH_SHORT).show()
+                binding.imageView2.visibility = View.INVISIBLE
             }
             ServerResponse.SERVER_ERROR -> {
                 Toast.makeText(context, "Update of profile picture failed!", Toast.LENGTH_SHORT).show()

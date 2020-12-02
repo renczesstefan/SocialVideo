@@ -33,7 +33,7 @@ class LoginFragment : Fragment() {
          * Kontrola, ci uz bol uzivatel prihlaseny a teda ci obsahuje sessionManager token
          * Pri logoute tento token mazeme a teda je pouzivatel nuteny sa znova prihlasit
          * */
-        if(!sessionManager.fetchAuthToken().isNullOrBlank()){
+        if (!sessionManager.fetchAuthToken().isNullOrBlank()) {
             this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
         } else {
 
@@ -69,15 +69,20 @@ class LoginFragment : Fragment() {
     }
 
     private fun resolveUserLogin(response: ServerResponse) {
-        when (response){
+        when (response) {
             ServerResponse.SERVER_SUCCESS -> {
                 this.findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                 Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
-                loginViewModel.loggedIn()
+                loginViewModel.resetOnUserLogin()
             }
+            ServerResponse.CONNECTION_ERROR -> {
+                Toast.makeText(context, "Internet connection error!", Toast.LENGTH_SHORT).show()
+                loginViewModel.resetOnUserLogin()
+            }
+
             ServerResponse.SERVER_ERROR -> {
                 Toast.makeText(context, "Login failed!", Toast.LENGTH_SHORT).show()
-                loginViewModel.loggedIn()
+                loginViewModel.resetOnUserLogin()
             }
             else -> {}
         }

@@ -35,12 +35,9 @@ class RegistrationViewModel : ViewModel() {
 
         checkUsernameResponse.enqueue(object : Callback<CheckUsernameResponse> {
             override fun onFailure(call: Call<CheckUsernameResponse>?, t: Throwable?) {
-                _onUserRegistration.value = ServerResponse.SERVER_ERROR
+                _onUserRegistration.value = ServerResponse.CONNECTION_ERROR
             }
-            override fun onResponse(
-                call: Call<CheckUsernameResponse>?,
-                response: Response<CheckUsernameResponse>?
-            ) {
+            override fun onResponse(call: Call<CheckUsernameResponse>?, response: Response<CheckUsernameResponse>?) {
                 if (response?.code() == 200 && response.body()!!.exists) {
                     _onUserRegistration.value = ServerResponse.USER_ALREADY_EXISTS
                 } else {
@@ -69,7 +66,7 @@ class RegistrationViewModel : ViewModel() {
 
     }
 
-    fun userRegistered() {
+    fun resetOnUserRegistration() {
         _onUserRegistration.value = ServerResponse.DEFAULT
     }
 

@@ -38,23 +38,27 @@ class RegistrationFragment : Fragment() {
 
 
         private fun resolveUserRegistration(response: ServerResponse) {
-                when (response){
+                when (response) {
                         ServerResponse.SERVER_SUCCESS -> {
                                 this.findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
                                 Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
-                                registrationViewModel.userRegistered()
+                                registrationViewModel.resetOnUserRegistration()
+                        }
+                        ServerResponse.CONNECTION_ERROR -> {
+                                Toast.makeText(context, "Internet connection error!", Toast.LENGTH_SHORT).show()
+                                registrationViewModel.resetOnUserRegistration()
                         }
                         ServerResponse.SERVER_ERROR -> {
                                 Toast.makeText(context, "Registration failed!", Toast.LENGTH_SHORT).show()
-                                registrationViewModel.userRegistered()
+                                registrationViewModel.resetOnUserRegistration()
                         }
                         ServerResponse.PASSWORD_MISMATCH -> {
                                 Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
-                                registrationViewModel.userRegistered()
+                                registrationViewModel.resetOnUserRegistration()
                         }
                         ServerResponse.USER_ALREADY_EXISTS -> {
                                 Toast.makeText(context, "User with this username has already been registered!", Toast.LENGTH_SHORT).show()
-                                registrationViewModel.userRegistered()
+                                registrationViewModel.resetOnUserRegistration()
                         }
                         else -> {}
                 }

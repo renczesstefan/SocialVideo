@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.MimeTypes
@@ -22,8 +21,7 @@ import com.social.socialvideo.domain.UserPost
 /**
  * Adapter pre recycle view pre posts
  * */
-class UserPostsAdapter(private val context: Context) :
-    RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
+class UserPostsAdapter(private val context: Context) : RecyclerView.Adapter<UserPostsAdapter.ViewHolder>() {
 
     var data: List<UserPost> = emptyList()
         set(value) {
@@ -49,13 +47,13 @@ class UserPostsAdapter(private val context: Context) :
         holder.uploadDate.text = item.created
 
         // Glide na renderovanie profilovej fotky
-        if(item.profile != "") {
+        if (item.profile != "") {
             Glide.with(context)
                 .load("http://api.mcomputing.eu/mobv/uploads/" + item.profile)
                 .apply(RequestOptions.skipMemoryCacheOf(true))
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .into(holder.profilePhoto)
-        }else{
+        } else {
             holder.profilePhoto.setBackgroundResource(R.drawable.defaut_user_profile_picture)
         }
 
@@ -90,10 +88,6 @@ class UserPostsAdapter(private val context: Context) :
         val uploadDate: TextView = itemView.findViewById(R.id.upload_date)
         val profilePhoto: ImageView = itemView.findViewById(R.id.profile_photo)
         val player: PlayerView = itemView.findViewById(R.id.video_view)
-    }
-
-    class VideoStateHolder {
-
     }
 
 }

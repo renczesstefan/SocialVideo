@@ -36,6 +36,8 @@ class PostsFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "Only no null activity is required"
         }
+
+        // Vizualne oddelenie jednotlivych postov
         val dividerItemDecoration = DividerItemDecoration(
             binding.userPosts.context, 1)
         binding.userPosts.addItemDecoration(dividerItemDecoration)

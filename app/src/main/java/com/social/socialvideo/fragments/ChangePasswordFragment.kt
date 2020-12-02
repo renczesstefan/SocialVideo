@@ -30,7 +30,7 @@ class ChangePasswordFragment : Fragment() {
         binding.changePasswordViewModel = changePasswordViewModel
 
         changePasswordViewModel.onChangeResponse.observe(viewLifecycleOwner, Observer { changeResponse ->
-            if(changeResponse != ServerResponse.DEFAULT){
+            if (changeResponse != ServerResponse.DEFAULT) {
                 resolveOnChangeResponse(changeResponse)
                 changePasswordViewModel.resetOnChange()
             }
@@ -54,6 +54,9 @@ class ChangePasswordFragment : Fragment() {
             ServerResponse.SERVER_SUCCESS -> {
                 this.findNavController().navigate(R.id.action_changePasswordFragment_to_profileFragment)
                 Toast.makeText(context, "Password successfully changed!", Toast.LENGTH_SHORT).show()
+            }
+            ServerResponse.CONNECTION_ERROR -> {
+                Toast.makeText(context, "Internet connection error!", Toast.LENGTH_SHORT).show()
             }
             ServerResponse.SERVER_ERROR -> {
                 Toast.makeText(context, "Password change failed!", Toast.LENGTH_SHORT).show()
