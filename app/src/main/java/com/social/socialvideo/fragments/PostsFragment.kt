@@ -50,7 +50,7 @@ class PostsFragment : Fragment() {
         postsViewModel.onUserRecordsNavigate.observe(viewLifecycleOwner, Observer { userPosts ->
             if (userPosts) {
                 this.findNavController()
-                    .navigate(R.id.action_postsFragment_to_recordVideoFragment)
+                    .navigate(R.id.action_postsFragment_to_newPostFragment)
                 postsViewModel.resetRecordVideoNavigate()
             }
         })

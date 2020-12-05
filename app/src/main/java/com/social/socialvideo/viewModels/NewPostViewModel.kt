@@ -19,7 +19,7 @@ import retrofit2.Response
 import java.io.File
 
 
-class RecordViewModel : ViewModel() {
+class NewPostViewModel : ViewModel() {
     var _uploadStatus = MutableLiveData<ServerResponse>()
     val uploadStatus: LiveData<ServerResponse>
         get() = _uploadStatus

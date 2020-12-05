@@ -5,10 +5,11 @@
     <data>
         <variable
              name="recordViewModel"
-            type="com.social.socialvideo.viewModels.RecordViewModel" />
+            type="com.social.socialvideo.viewModels.NewPostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/record"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/AppTheme">

@@ -49,19 +49,38 @@
         android:name="com.social.socialvideo.fragments.PostsFragment"
         android:label="PostsFragment" >
         <action
-            android:id="@+id/action_postsFragment_to_recordVideoFragment"
-            app:destination="@id/recordVideoFragment" />
+            android:id="@+id/action_postsFragment_to_newPostFragment"
+            app:destination="@id/newpostfragment" />
         <action
             android:id="@+id/action_postsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/recordVideoFragment"
-        android:name="com.social.socialvideo.fragments.RecordVideoFragment"
-        android:label="RecordVideoFragment" >
+        android:id="@+id/newpostfragment"
+        android:name="com.social.socialvideo.fragments.NewPostFragment"
+        android:label="newPostFragment" >
         <action
-            android:id="@+id/action_recordVideoFragment_to_postsFragment"
+            android:id="@+id/action_newPostFragment_to_postsFragment"
             app:destination="@id/postsFragment" />
+        <action
+            android:id="@+id/action_newPostFragment_to_camera2VideoFragment"
+            app:destination="@id/camera2VideoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/camera2VideoFragment"
+        android:name="com.social.socialvideo.fragments.Camera2VideoFragment"
+        android:label="Camera2VideoFragment" >
+        <action
+            android:id="@+id/action_camera2VideoFragment_to_confirmVideoFragment"
+            app:destination="@id/confirmVideoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmVideoFragment"
+        android:name="com.social.socialvideo.fragments.ConfirmVideoFragment"
+        android:label="ConfirmVideoFragment" >
+        <action
+            android:id="@+id/action_confirmVideoFragment_to_newPostFragment"
+            app:destination="@id/newpostfragment" />
     </fragment>
 
 </navigation>

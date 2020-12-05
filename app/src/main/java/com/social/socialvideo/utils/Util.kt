@@ -1,16 +1,24 @@
 package com.social.socialvideo.utils
 
+import android.Manifest
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Log
+import android.util.Size
 
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.lang.Long.signum
 
 class PasswordUtil {
     companion object {
@@ -134,3 +142,60 @@ object PathUtils {
 
 
 class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
+
+/**
+ * Saves a JPEG [Image] into the specified [File].
+ */
+internal class ImageSaver(
+    /**
+     * The JPEG image
+     */
+    private val image: Image,
+
+    /**
+     * The file we save the image into.
+     */
+    private val file: File
+) : Runnable {
+
+    override fun run() {
+        val buffer = image.planes[0].buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        var output: FileOutputStream? = null
+        try {
+            output = FileOutputStream(file).apply {
+                write(bytes)
+            }
+        } catch (e: IOException) {
+            Log.e(TAG, e.toString())
+        } finally {
+            image.close()
+            output?.let {
+                try {
+                    it.close()
+                } catch (e: IOException) {
+                    Log.e(TAG, e.toString())
+                }
+            }
+        }
+    }
+
+    companion object {
+        /**
+         * Tag for the [Log].
+         */
+        private val TAG = "ImageSaver"
+    }
+}
+
+internal class CompareSizesByArea : Comparator<Size> {
+
+    // We cast here to ensure the multiplications won't overflow
+    override fun compare(lhs: Size, rhs: Size) =
+        signum(lhs.width.toLong() * lhs.height - rhs.width.toLong() * rhs.height)
+
+}
+
+val REQUEST_VIDEO_PERMISSIONS = 1
+val VIDEO_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
