@@ -68,8 +68,8 @@ class ChangePasswordViewModel : ViewModel() {
     private fun initChangePasswordRequest(): ChangePasswordRequest {
         val changePasswordRequest = ChangePasswordRequest()
         changePasswordRequest.token = token
-        changePasswordRequest.oldpassword = oldpassword.value.toString()
-        changePasswordRequest.newpassword = newpassword.value.toString()
+        changePasswordRequest.oldpassword = PasswordUtil.hashPwd(oldpassword.value.toString())
+        changePasswordRequest.newpassword = PasswordUtil.hashPwd(newpassword.value.toString())
         return changePasswordRequest
     }
 }

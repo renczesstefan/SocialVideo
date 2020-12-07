@@ -3,17 +3,22 @@ package com.social.socialvideo.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.util.Util
+import com.google.firebase.crashlytics.internal.common.Utils
+import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.rest.entities.CheckUsernameRequest
 import com.social.socialvideo.rest.entities.CheckUsernameResponse
 import com.social.socialvideo.rest.entities.RegistrationRequest
 import com.social.socialvideo.rest.entities.RegistrationResponse
-import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.rest.services.RestApiService
 import com.social.socialvideo.rest.services.retrofit
 import com.social.socialvideo.utils.PasswordUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
+import java.security.SecureRandom
 
 class RegistrationViewModel : ViewModel() {
 
@@ -74,8 +79,7 @@ class RegistrationViewModel : ViewModel() {
         val registrationRequest = RegistrationRequest()
         registrationRequest.username = userId.value.toString()
         registrationRequest.email = email.value.toString()
-        registrationRequest.password = password.value.toString()
+        registrationRequest.password = PasswordUtil.hashPwd(password.value.toString())
         return registrationRequest
     }
-
 }

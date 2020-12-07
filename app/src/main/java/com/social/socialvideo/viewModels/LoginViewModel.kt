@@ -8,6 +8,7 @@ import com.social.socialvideo.rest.entities.LoginResponse
 import com.social.socialvideo.enums.ServerResponse
 import com.social.socialvideo.rest.services.RestApiService
 import com.social.socialvideo.rest.services.retrofit
+import com.social.socialvideo.utils.PasswordUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +66,7 @@ class LoginViewModel : ViewModel() {
     private fun initLoginRequest(): LoginRequest {
         val loginRequest = LoginRequest()
         loginRequest.username = username.value.toString()
-        loginRequest.password = password.value.toString()
+        loginRequest.password = PasswordUtil.hashPwd(password.value.toString())
         return loginRequest
     }
 
