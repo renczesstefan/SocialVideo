@@ -43,6 +43,14 @@ class ConfirmVideoFragment : Fragment() {
                     .navigate(R.id.action_confirmVideoFragment_to_newPostFragment, bundle)
             }
         })
+
+        confirmVideoViewModel.discarded.observe(viewLifecycleOwner, Observer { discarded ->
+            if (discarded) {
+                this.findNavController()
+                    .navigate(R.id.action_confirmVideoFragment_to_camera2VideoFragment)
+            }
+        })
+
         return binding.root
     }
 }

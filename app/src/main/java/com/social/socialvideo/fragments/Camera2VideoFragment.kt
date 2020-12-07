@@ -10,6 +10,7 @@ import android.hardware.camera2.CameraCharacteristics.SENSOR_ORIENTATION
 import android.hardware.camera2.CameraDevice.TEMPLATE_PREVIEW
 import android.hardware.camera2.CameraDevice.TEMPLATE_RECORD
 import android.media.MediaRecorder
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -21,17 +22,22 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.example.android.camera2basic.AutoFitTextureView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.social.socialvideo.R
+import com.social.socialvideo.databinding.Camera2VideoBinding
 import com.social.socialvideo.utils.CompareSizesByArea
 import com.social.socialvideo.utils.REQUEST_VIDEO_PERMISSIONS
 import com.social.socialvideo.utils.VIDEO_PERMISSIONS
@@ -162,6 +168,8 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
      */
     private var flashSupported = false
 
+    private lateinit var binding: Camera2VideoBinding
+
     /**
      * [CameraDevice.StateCallback] is called when [CameraDevice] changes its status.
      */
@@ -199,14 +207,18 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.camer2_layout, container, false)
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.camera2_video, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        textureView = view.findViewById(R.id.texture)
-        videoButton = view.findViewById<FloatingActionButton>(R.id.shot).also {
+        textureView = binding.texture
+        binding.shot.also {
             it.setOnClickListener(this)
         }
-        view.findViewById<FloatingActionButton>(R.id.swap).also {
+        binding.swap.also {
             it.setOnClickListener(this)
         }
     }
@@ -364,10 +376,6 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
                 var maxPreviewWidth = if (swappedDimensions) displaySize.y else displaySize.x
                 var maxPreviewHeight = if (swappedDimensions) displaySize.x else displaySize.y
 
-                if (maxPreviewWidth > MAX_PREVIEW_WIDTH) maxPreviewWidth =
-                    MAX_PREVIEW_WIDTH
-                if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) maxPreviewHeight =
-                    MAX_PREVIEW_HEIGHT
 
                 // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                 // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
@@ -592,6 +600,8 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         if (cameraDevice == null || !textureView.isAvailable) return
 
         try {
+            binding.shot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_fiber_manual_record_24))
+            binding.swap.visibility = View.INVISIBLE
             closePreviewSession()
             setUpMediaRecorder()
             val texture = textureView.surfaceTexture.apply {
@@ -642,6 +652,8 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     }
 
     private fun stopRecordingVideo() {
+        binding.shot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_outline_photo_camera_48))
+        binding.swap.visibility = View.VISIBLE
         isRecordingVideo = false
         mediaRecorder?.apply {
             stop()

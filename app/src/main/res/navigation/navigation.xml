@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_confirmVideoFragment_to_newPostFragment"
             app:destination="@id/newpostfragment" />
+        <action
+            android:id="@+id/action_confirmVideoFragment_to_camera2VideoFragment"
+            app:destination="@id/camera2VideoFragment" />
     </fragment>
 
 </navigation>

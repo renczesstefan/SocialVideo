@@ -22,16 +22,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/confirm_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginTop="32dp"
+            android:onClick="@{() -> confirmVideoModel.confirmVideo()}"
+            android:src="@drawable/ic_baseline_check_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.892"
+            app:layout_constraintHorizontal_bias="0.925"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{() -> confirmVideoModel.confirmVideo()}"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/discard_video"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_baseline_clear_24"
+            app:layout_constraintStart_toStartOf="@+id/videoView"
+            app:layout_constraintTop_toTopOf="@+id/videoView"
+            android:onClick="@{() -> confirmVideoModel.discardVideo()}">
+
+        </de.hdodenhof.circleimageview.CircleImageView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
