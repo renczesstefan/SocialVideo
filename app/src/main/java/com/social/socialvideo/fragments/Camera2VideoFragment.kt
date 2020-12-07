@@ -154,16 +154,6 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     private var sensorOrientation = 0
 
     /**
-     * Max preview width that is guaranteed by Camera2 API
-     */
-    private val MAX_PREVIEW_WIDTH = 1920
-
-    /**
-     * Max preview height that is guaranteed by Camera2 API
-     */
-    private val MAX_PREVIEW_HEIGHT = 1080
-
-    /**
      * Whether the current camera device supports Flash or not.
      */
     private var flashSupported = false
@@ -221,6 +211,9 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         binding.swap.also {
             it.setOnClickListener(this)
         }
+        binding.cancel.also {
+            it.setOnClickListener(this)
+        }
     }
 
     override fun onResume() {
@@ -248,6 +241,8 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         when (view.id) {
             R.id.shot -> if (isRecordingVideo) stopRecordingVideo() else startRecordingVideo()
             R.id.swap -> switchCamera()
+            R.id.cancel -> this.findNavController()
+                .navigate(R.id.action_camera2VideoFragment_to_postsFragment);
         }
     }
 
@@ -652,7 +647,7 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     }
 
     private fun stopRecordingVideo() {
-        binding.shot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_outline_photo_camera_48))
+        binding.shot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_videocam_24))
         binding.swap.visibility = View.VISIBLE
         isRecordingVideo = false
         mediaRecorder?.apply {
