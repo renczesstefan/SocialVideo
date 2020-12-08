@@ -1,16 +1,15 @@
 package com.social.socialvideo.db
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.social.socialvideo.db.dao.SocialVideoDatabase
 import com.social.socialvideo.db.entities.DatabaseUserPost
 import com.social.socialvideo.db.entities.asDomainModel
 import com.social.socialvideo.domain.UserPost
-import com.social.socialvideo.rest.services.RestApiService
 import com.social.socialvideo.rest.entities.UserPostsRequest
 import com.social.socialvideo.rest.entities.UserPostsResponse
+import com.social.socialvideo.rest.services.RestApiService
 import com.social.socialvideo.rest.services.retrofit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

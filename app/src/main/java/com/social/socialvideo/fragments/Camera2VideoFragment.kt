@@ -69,8 +69,7 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     }
 
     /**
-     * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
-     * [TextureView].
+     * čaká na to pokiaľ bude inicializovaný preview pre kameru (PREVIEW TEXTURE)
      */
     private val surfaceTextureListener = object : TextureView.SurfaceTextureListener {
 
@@ -161,7 +160,7 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     private lateinit var binding: Camera2VideoBinding
 
     /**
-     * [CameraDevice.StateCallback] is called when [CameraDevice] changes its status.
+     * Listener, ktorý sleduje aktuálny stav kamery a podľa toho vykoná danú funkciu
      */
     private val stateCallback = object : CameraDevice.StateCallback() {
 
@@ -242,12 +241,13 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
             R.id.shot -> if (isRecordingVideo) stopRecordingVideo() else startRecordingVideo()
             R.id.swap -> switchCamera()
             R.id.cancel -> this.findNavController()
-                .navigate(R.id.action_camera2VideoFragment_to_postsFragment);
+                .navigate(R.id.action_camera2VideoFragment_to_postsFragment)
         }
     }
 
     /**
-     * Starts a background thread and its [Handler].
+     * je potrebné tzv. vlákno vpozadí, ktoré je používane na preview kameru
+     * ktorú máme momentálne otvorenú
      */
     private fun startBackgroundThread() {
         backgroundThread = HandlerThread("CameraBackground")
@@ -317,6 +317,9 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
             checkSelfPermission((activity as FragmentActivity), it) != PERMISSION_GRANTED
         }
 
+    /**
+     * Nepoužívame lebo máme zakázaný landscape
+     */
     private fun areDimensionsSwapped(displayRotation: Int): Boolean {
         var swappedDimensions = false
         when (displayRotation) {
@@ -337,6 +340,9 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         return swappedDimensions
     }
 
+    /**
+     * Nastavíme parametre kamery (veľkosť rotácia window manager)
+     */
     private fun setUpCameraOutputs(width: Int, height: Int) {
         val manager = requireActivity().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
@@ -404,9 +410,7 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     }
 
     /**
-     * Tries to open a [CameraDevice]. The result is listened by [stateCallback].
-     *
-     * Lint suppression - permission is checked in [hasPermissionsGranted]
+     * Otvorí kameru s tým, že nakonfiguruje definované hardvérové outputs, a nakonfigurovaný texture view
      */
     @SuppressLint("MissingPermission")
     private fun openCamera(width: Int, height: Int) {
@@ -520,9 +524,7 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
     }
 
     /**
-     * Configures the necessary [android.graphics.Matrix] transformation to `textureView`.
-     * This method should not to be called until the camera preview size is determined in
-     * openCamera, or until the size of `textureView` is fixed.
+     * Nastavuju sa tu parametme pre texture view
      *
      * @param viewWidth  The width of `textureView`
      * @param viewHeight The height of `textureView`
@@ -550,6 +552,10 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         textureView.setTransform(matrix)
     }
 
+    /**
+     * Nastavenie nahrávania videa
+     * je možn tu nastaviť výstupný formáť cestu, frame rate orientáciu
+     */
     @Throws(IOException::class)
     private fun setUpMediaRecorder() {
         val cameraActivity = activity ?: return
@@ -591,6 +597,10 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         }
     }
 
+    /**
+     * Zavolá sa po kliknutí pre nahrávanie videa
+     * Je potrebné definovať pre media recorder aby vedel z čoho má video zaznamenávať
+     */
     private fun startRecordingVideo() {
         if (cameraDevice == null || !textureView.isAvailable) return
 
@@ -677,37 +687,8 @@ class Camera2VideoFragment : Fragment(), View.OnClickListener,
         it.width == it.height * 4 / 3 && it.width <= 1080 } ?: choices[choices.size - 1]
 
     /**
-     * Given [choices] of [Size]s supported by a camera, chooses the smallest one whose
-     * width and height are at least as large as the respective requested values, and whose aspect
-     * ratio matches with the specified value.
-     *
-     * @param choices     The list of sizes that the camera supports for the intended output class
-     * @param width       The minimum desired width
-     * @param height      The minimum desired height
-     * @param aspectRatio The aspect ratio
-     * @return The optimal [Size], or an arbitrary one if none were big enough
+     * Zabezpečuje aby bola vytváraná nová inštancia pre kameru
      */
-    private fun chooseOptimalSize(
-        choices: Array<Size>,
-        width: Int,
-        height: Int,
-        aspectRatio: Size
-    ): Size {
-
-        // Collect the supported resolutions that are at least as big as the preview Surface
-        val w = aspectRatio.width
-        val h = aspectRatio.height
-        val bigEnough = choices.filter {
-            it.height == it.width * h / w && it.width >= width && it.height >= height }
-
-        // Pick the smallest of those, assuming we found any
-        return if (bigEnough.isNotEmpty()) {
-            Collections.min(bigEnough, CompareSizesByArea())
-        } else {
-            choices[0]
-        }
-    }
-
     companion object {
         /**
          * Conversion from screen rotation to JPEG orientation.

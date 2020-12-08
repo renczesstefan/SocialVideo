@@ -2,17 +2,13 @@ package com.social.socialvideo.fragments
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,9 +28,6 @@ class NewPostFragment : Fragment() {
     val REQUEST_VIDEO_CAPTURE = 1
     val GALLERY_REQUEST = 9
     private lateinit var sessionManager: SessionManager
-
-    val MAX_PREVIEW_WIDTH = 1920
-    val MAX_PREVIEW_HEIGHT = 1080
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,14 +88,6 @@ class NewPostFragment : Fragment() {
         }
     }
 
-    /*Creating intent to tell external activity to open camera only for video capturing*//*
-    private fun dispatchTakeVideoIntent() {
-        Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
-            takeVideoIntent.resolveActivity(this.requireContext().packageManager)?.also {
-                startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
-            }
-        }
-    }*/
 
     /*Will be called whether the camera or gallery activity finished it's process*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
