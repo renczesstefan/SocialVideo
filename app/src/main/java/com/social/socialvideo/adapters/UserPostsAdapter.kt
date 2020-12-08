@@ -30,6 +30,7 @@ class UserPostsAdapter(private val context: Context) : RecyclerView.Adapter<User
             notifyDataSetChanged()
         }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater
@@ -54,33 +55,36 @@ class UserPostsAdapter(private val context: Context) : RecyclerView.Adapter<User
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .into(holder.profilePhoto)
         } else {
-            holder.profilePhoto.setBackgroundResource(R.drawable.defaut_user_profile_picture)
+            holder.profilePhoto.setBackgroundResource(R.drawable.user)
         }
 
-        // Exoplayer na prehravanie videi
-        val player: SimpleExoPlayer = SimpleExoPlayer.Builder(context)
-            .build()
-        holder.player.player = player
-        val mediaItem: MediaItem =
-            MediaItem.Builder()
-                .setUri("http://api.mcomputing.eu/mobv/uploads/" + item.videourl)
-                .setMimeType(MimeTypes.BASE_TYPE_VIDEO)
-                .build()
-
-        player.setMediaItem(mediaItem)
-        player.playWhenReady = true
-        player.seekTo(0, 0)
-        player.prepare()
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
+        if(holder.adapterPosition>=0){
+            val player: SimpleExoPlayer = SimpleExoPlayer.Builder(context).build()
+            val mediaItem: MediaItem =
+                MediaItem.Builder()
+                    .setUri("http://api.mcomputing.eu/mobv/uploads/" + data[holder.adapterPosition].videourl)
+                    .setMimeType(MimeTypes.BASE_TYPE_VIDEO)
+                    .build()
+
+            player.setMediaItem(mediaItem)
+            player.seekTo(0, 0)
+            player.prepare()
+            holder.player.player = player
+            holder.player.requestFocus()
+        }
         super.onViewAttachedToWindow(holder)
-        holder.player.player?.playWhenReady = true
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
+        if(holder.adapterPosition>=0) {
+            holder.player.player?.stop()
+            holder.player.player?.release()
+            holder.player.player = null
+        }
         super.onViewDetachedFromWindow(holder)
-        holder.player.player?.playWhenReady = false
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

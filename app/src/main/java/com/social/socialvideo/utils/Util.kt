@@ -148,9 +148,6 @@ object PathUtils {
     }
 }
 
-
-class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView)
-
 internal class CompareSizesByArea : Comparator<Size> {
 
     // We cast here to ensure the multiplications won't overflow

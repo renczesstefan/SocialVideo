@@ -1,8 +1,5 @@
 package com.social.socialvideo.fragments
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,7 +60,6 @@ class PostsFragment : Fragment() {
             }
         })
 
-        SimpleExoPlayer.Builder(requireContext()).build()
         return binding.root
     }
 

@@ -144,7 +144,7 @@ class ProfileFragment : Fragment() {
                 .into(binding.profileImage)
         }else{
             Glide.with(this)
-                .load(getImage(R.drawable.defaut_user_profile_picture.toString())).apply(RequestOptions.skipMemoryCacheOf(true))
+                .load(getImage(R.drawable.user.toString())).apply(RequestOptions.skipMemoryCacheOf(true))
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .into(binding.profileImage)
         }
